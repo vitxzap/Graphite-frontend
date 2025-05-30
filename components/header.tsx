@@ -42,8 +42,11 @@ export default function Header() {
 							key={option.route}
 							cursor="pointer"
 							onClick={() => {
-                                setPage(option.title);
-                                router.push(option.route)
+								setPage(option.title);
+								setTimeout(() => {
+									router.push(option.route)
+								}, 200)
+                                
 							}}>
 							<SegmentGroup.ItemText>{option.title}</SegmentGroup.ItemText>
 						</SegmentGroup.Item>
