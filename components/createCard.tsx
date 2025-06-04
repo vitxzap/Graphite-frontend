@@ -1,23 +1,23 @@
 "use client";
-import { Card, Image, CardRoot, ConditionalValue } from "@chakra-ui/react";
-import { motion, MotionValue } from "motion/react";
-import React, { useEffect, useState } from "react";
-export default function CreateCards(props: any) {
-	console.log("renderizou componente");
-	const cards = props.cards;
-	const MotionCard = motion(Card.Root);
+import { Card, Flex, Field, Input } from "@chakra-ui/react";
+import { motion } from "motion/react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { DataContext } from "@/app/user/create/page";
+
+function CreateCards({ cards }) {
+	const MotionCard = motion.create(Card.Root);
 	const [isSelected, setIsSelected] = useState<string>();
-	function setSelectedCard(title: string) {
-		if (title == isSelected) {
-			return { backgroundColor: "#dedede" };
-		}
-	}
+	const { state, setState } = useContext(DataContext)
+	useEffect(() => {
+
+	}, [state])
 	return cards.map((item: any) => {
 		return (
 			<MotionCard
-				style={setSelectedCard(item.title)}
+				backgroundColor={`${isSelected == item.title ? "#dedede" : ""}`}
 				transitionDuration={"fast"}
 				onClick={() => {
+					setState(item.title)
 					setIsSelected(item.title);
 				}}
 				paddingY="2"
@@ -38,3 +38,5 @@ export default function CreateCards(props: any) {
 		);
 	});
 }
+
+export { CreateCards };

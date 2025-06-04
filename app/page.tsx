@@ -7,10 +7,10 @@ import { toaster, Toaster } from "@/components/ui/toaster";
 import { useRouter } from "next/navigation";
 export default function Home() {
 	const [password, setPassword] = useState<any>();
-	const router = useRouter()
+	const router = useRouter();
 	return (
-    <Center h="vh" bg="white" color="black">
-      <Toaster />
+		<Center h="vh" bg="white" color="black">
+			<Toaster />
 			<Card.Root maxW="">
 				<Card.Header>
 					<Card.Title fontSize="xl">Entrar no sistema</Card.Title>
@@ -31,23 +31,19 @@ export default function Home() {
 				<Card.Footer justifyContent="flex-end">
 					<Button
 						variant="solid"
-						onClick={() =>
-						{
+						onClick={() => {
 							toaster.create({
 								description: "Under construction",
 								type: "error",
-							})
+							});
 							setTimeout(() => {
-								router.push("/user/home")
-							}, 1000)
-						}
-							
-						}>
+								router.push("/user/home");
+							}, 1000);
+						}}>
 						Entrar <RiArrowRightLine />
 					</Button>
 				</Card.Footer>
-      </Card.Root>
-      
+			</Card.Root>
 		</Center>
 	);
 }
