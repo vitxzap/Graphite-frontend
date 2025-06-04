@@ -4,8 +4,10 @@ import { PasswordInput, PasswordStrengthMeter } from "@/components/ui/password-i
 import { RiArrowRightLine } from "react-icons/ri";
 import { useState } from "react";
 import { toaster, Toaster } from "@/components/ui/toaster";
+import { useRouter } from "next/navigation";
 export default function Home() {
 	const [password, setPassword] = useState<any>();
+	const router = useRouter()
 	return (
     <Center h="vh" bg="white" color="black">
       <Toaster />
@@ -30,10 +32,16 @@ export default function Home() {
 					<Button
 						variant="solid"
 						onClick={() =>
+						{
 							toaster.create({
-								description: "Ainda to criando zé, relaxa ai",
+								description: "Under construction",
 								type: "error",
 							})
+							setTimeout(() => {
+								router.push("/user/home")
+							}, 1000)
+						}
+							
 						}>
 						Entrar <RiArrowRightLine />
 					</Button>

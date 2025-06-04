@@ -1,5 +1,5 @@
 "use client";
-import { Flex, SegmentGroup, SegmentGroupItemText, useSteps } from "@chakra-ui/react";
+import { Flex, SegmentGroup, } from "@chakra-ui/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
