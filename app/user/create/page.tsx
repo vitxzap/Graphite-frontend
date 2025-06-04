@@ -5,11 +5,14 @@ import Header from "../../../components/header";
 import { CreateCards } from "@/components/createCard";
 import { motion } from "motion/react";
 import { createContext, useMemo, useState, memo, useContext, useEffect } from "react";
-
+import storage from "local-storage"
 export const DataContext = createContext<any>(null);
 
 const Stable = (props: any) => {
 	const [state, setState] = useState();
+	useEffect(() => {
+		storage("teste", state)
+	}, [state])
 	const cardsIconSize = 62;
 	const cards = useMemo(
 		() => [
@@ -51,6 +54,7 @@ const Stable = (props: any) => {
 
 function Create() {
 	const MotionFlex = motion.create(Flex);
+	const [state, seState] = useState(storage("teste"))
 	return (
 		<Flex height="vh" maxW="vw" width="vw" direction="column" overflowX="hidden">
 			<Header />
