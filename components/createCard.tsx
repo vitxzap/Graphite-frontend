@@ -1,14 +1,15 @@
 "use client";
 import { Card, Image, CardRoot, ConditionalValue } from "@chakra-ui/react";
 import { motion, MotionValue } from "motion/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 export default function CreateCards(props: any) {
+	console.log("renderizou componente");
 	const cards = props.cards;
 	const MotionCard = motion(Card.Root);
 	const [isSelected, setIsSelected] = useState<string>();
 	function setSelectedCard(title: string) {
 		if (title == isSelected) {
-			return { backgroundColor: "#dedede", };
+			return { backgroundColor: "#dedede" };
 		}
 	}
 	return cards.map((item: any) => {
@@ -21,7 +22,7 @@ export default function CreateCards(props: any) {
 				}}
 				paddingY="2"
 				cursor="pointer"
-                key={item.title}
+				key={item.title}
 				whileTap={{ scale: 0.9 }}
 				whileHover={{ scale: 1.025, backgroundColor: "#dedede" }}>
 				<Card.Body gap="3">
