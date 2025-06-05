@@ -1,4 +1,3 @@
-"use client";
 import { Flex } from "@chakra-ui/react";
 import { BiCloud, BiTv, BiUser, BiError } from "react-icons/bi";
 import Header from "../../../components/header";
@@ -6,10 +5,11 @@ import { CreateCards, CreateInput } from "@/components/createCard";
 import { motion } from "motion/react";
 import { CardProvider } from "@/app/context/cardContext";
 import { cardInfo } from "@/app/context/cardType";
-
-function Create() {
-	const MotionFlex = motion.create(Flex);
+import { host, server } from "@/app/api/searchingData";
+import { MotionFlex } from "@/components/chakra-motion";
+async function Create() {
 	const cardsIconSize = 62;
+	const hosts = await host.get();
 	const cards: cardInfo = [
 		{
 			title: "Novo host",

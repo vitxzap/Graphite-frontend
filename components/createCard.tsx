@@ -4,12 +4,11 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useCardContext } from "@/app/context/cardContext";
 import { cardInfo } from "@/app/context/cardType";
-import { fetchHost } from "@/app/api/searchingData";
-const data = await fetchHost();
+import { host, server } from "@/app/api/searchingData";
+import { MotionCard, MotionFlex } from "./chakra-motion";
 function CreateCards(props: any) {
 	const cards = props.cards;
 	const { setCard } = useCardContext();
-	const MotionCard = motion.create(Card.Root);
 	const [isSelected, setIsSelected] = useState<string>();
 	return cards.map((item: any) => {
 		return (
@@ -39,21 +38,18 @@ function CreateCards(props: any) {
 	});
 }
 
-function CreateInput() {
-	const MotionFlex = motion.create(Flex);
-	const frameworks = createListCollection({items: data.data});
+function CreateInput(props: any) {
+	const frameworks = createListCollection({ items: [] });
+	const [data, setData] = useState();
 	const { card }: undefined | cardInfo = useCardContext();
 	const [selectedCard, setSelectedCard] = useState<cardInfo | undefined>(undefined);
 	const [value, setValue] = useState("Selecione");
 	useEffect(() => {
 		setSelectedCard(card);
 	}, [card]);
+	
 	return (
-		<MotionFlex
-			w="full"
-			gapY="4"
-			flexWrap="wrap"
-			justifyContent="space-between">
+		<MotionFlex w="full" gapY="4" flexWrap="wrap" justifyContent="space-between">
 			{selectedCard?.defaultInput.map((item) => {
 				return (
 					<Field.Root maxW="45%">
@@ -65,7 +61,7 @@ function CreateInput() {
 			{selectedCard?.selectInput != null
 				? selectedCard?.selectInput.map((item) => {
 						return (
-							<Select.Root collection={frameworks} maxW="45%" size="lg" value={value} onValueChange={(e) => setValue(e.value)} >
+							<Select.Root collection={frameworks} maxW="45%" size="lg" value={value} onValueChange={(e) => setValue(e.value)}>
 								<Select.Label fontSize="md">{item.title}</Select.Label>
 								<Select.Control>
 									<Select.Trigger>
@@ -78,7 +74,7 @@ function CreateInput() {
 								<Portal>
 									<Select.Positioner>
 										<Select.Content>
-											{frameworks.items.map((framework) => (
+											{frameworks.items.map((framework: any) => (
 												<Select.Item item={framework.name} key={framework.id}>
 													{framework.name}
 													<Select.ItemIndicator />
