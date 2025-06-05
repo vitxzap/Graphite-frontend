@@ -4,6 +4,8 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useCardContext } from "@/app/context/cardContext";
 import { cardInfo } from "@/app/context/cardType";
+import { fetchHost } from "@/app/api/searchingData";
+const data = await fetchHost();
 function CreateCards(props: any) {
 	const cards = props.cards;
 	const { setCard } = useCardContext();
@@ -39,18 +41,11 @@ function CreateCards(props: any) {
 
 function CreateInput() {
 	const MotionFlex = motion.create(Flex);
-	const frameworks = createListCollection({
-		items: [
-			{ label: "React.js", value: "react" },
-			{ label: "Vue.js", value: "vue" },
-			{ label: "Angular", value: "angular" },
-			{ label: "Svelte", value: "svelte" },
-		],
-	});
+	const frameworks = createListCollection({items: data.data});
 	const { card }: undefined | cardInfo = useCardContext();
 	const [selectedCard, setSelectedCard] = useState<cardInfo | undefined>(undefined);
+	const [value, setValue] = useState("Selecione");
 	useEffect(() => {
-		console.log(card);
 		setSelectedCard(card);
 	}, [card]);
 	return (
@@ -70,11 +65,11 @@ function CreateInput() {
 			{selectedCard?.selectInput != null
 				? selectedCard?.selectInput.map((item) => {
 						return (
-							<Select.Root collection={frameworks} maxW="45%" size="lg">
+							<Select.Root collection={frameworks} maxW="45%" size="lg" value={value} onValueChange={(e) => setValue(e.value)} >
 								<Select.Label fontSize="md">{item.title}</Select.Label>
 								<Select.Control>
 									<Select.Trigger>
-										<Select.ValueText placeholder="Selecione" />
+										<Select.ValueText placeholder={value} />
 									</Select.Trigger>
 									<Select.IndicatorGroup>
 										<Select.Indicator />
@@ -84,8 +79,8 @@ function CreateInput() {
 									<Select.Positioner>
 										<Select.Content>
 											{frameworks.items.map((framework) => (
-												<Select.Item item={framework} key={framework.value}>
-													{framework.label}
+												<Select.Item item={framework.name} key={framework.id}>
+													{framework.name}
 													<Select.ItemIndicator />
 												</Select.Item>
 											))}
@@ -111,7 +106,7 @@ function CreateInput() {
 									</Dialog.Header>
 									<Dialog.Body>
 										<p>
-											Tem certeza que deseja criar a instâncias com os valores preenchidos? Certifique-se de ter preenchido os campos corretamente para evitar erros de consultar
+											Tem certeza que deseja criar a instância com os valores preenchidos? Certifique-se de ter preenchido os campos corretamente para evitar erros de consultar
 											no futuro.
 										</p>
 									</Dialog.Body>
