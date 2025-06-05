@@ -1,6 +1,6 @@
 "use client";
-import { Flex, Button, Card, Center, Field, Stack, Input } from "@chakra-ui/react";
-import { PasswordInput, PasswordStrengthMeter } from "@/components/ui/password-input";
+import { Button, Card, Center, Field, Stack, Input, defineConfig } from "@chakra-ui/react";
+import { PasswordInput  } from "@/components/ui/password-input";
 import { RiArrowRightLine } from "react-icons/ri";
 import { useState } from "react";
 import { toaster, Toaster } from "@/components/ui/toaster";
@@ -8,10 +8,11 @@ import { useRouter } from "next/navigation";
 export default function Home() {
 	const [password, setPassword] = useState<any>();
 	const router = useRouter();
+	
 	return (
 		<Center h="vh" bg="white" color="black">
 			<Toaster />
-			<Card.Root maxW="">
+			<Card.Root maxW="" scale={{base: "0.9", md: "1"}}  >
 				<Card.Header>
 					<Card.Title fontSize="xl">Entrar no sistema</Card.Title>
 					<Card.Description>Preencha os dados para acessar o site.</Card.Description>
@@ -20,7 +21,7 @@ export default function Home() {
 					<Stack gap="4" w="full">
 						<Field.Root>
 							<Field.Label>E-mail</Field.Label>
-							<Input size="lg" w="md" type="email" />
+							<Input size="lg"  type="email" />
 						</Field.Root>
 						<Field.Root>
 							<Field.Label>Senha</Field.Label>
