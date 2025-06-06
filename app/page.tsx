@@ -39,7 +39,7 @@ export default function Home() {
 							});
 							setTimeout(() => {
 								router.push("/user/home");
-							}, 1000);
+							}, 500);
 						}}>
 						Entrar <RiArrowRightLine />
 					</Button>
