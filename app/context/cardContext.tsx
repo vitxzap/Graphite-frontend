@@ -12,6 +12,7 @@ const CardContext = createContext<CardContextType | undefined>(undefined);
 
 export const CardProvider = ({ children }: { children: ReactNode }) => {
     const [card, setCard] = useState<object | undefined>(undefined);
+    const [action, setAction] = useState();
     return (
         <CardContext.Provider value={{card, setCard}}>
             {children}

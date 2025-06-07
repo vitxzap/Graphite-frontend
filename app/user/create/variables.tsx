@@ -6,9 +6,7 @@ const cards: cardInfo = [
 	{
 		title: "Novo host",
 		id: 1,
-		defaultInput: [
-			{ title: "Nome do host", type: "text", value: "name"  }
-		],
+		defaultInput: [{ title: "Nome do host", type: "text", value: "name" }],
 		icon: <BiTv size={cardsIconSize} />,
 		description: "Crie um novo host e o detalhe corretamente para resoluções mais precisas.",
 	},
@@ -16,7 +14,7 @@ const cards: cardInfo = [
 		title: "Novo server",
 		id: 2,
 		defaultInput: [{ title: "Nome do server", type: "text", value: "name" }],
-		selectInput: [{ title: "Pertence ao Host:", filter: "host", type: "text", value: "hostId" }],
+		selectInput: [{ title: "Pertence ao host:", filter: "host", type: "text", value: "hostId" }],
 		icon: <BiCloud size={cardsIconSize} />,
 		description: "Crie um novo server e o detalhe corretamente para resoluções mais precisas.",
 	},

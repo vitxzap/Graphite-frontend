@@ -1,11 +1,15 @@
+"use client"
 import { Flex } from "@chakra-ui/react";
 import Header from "../../../components/header";
 import { CreateCards, CreateInput } from "@/components/createCard";
 import { CardProvider } from "@/app/context/cardContext";
 import { cards } from "./variables";
+import { Toaster, toaster } from "@/components/ui/toaster";
+import { useState, useEffect } from "react";
 export default function Create() {
 	return (
 		<CardProvider>
+			<Toaster />
 			<Flex height="vh" maxW="vw" width="vw" direction="column" overflowX="hidden">
 				<Header />
 				<Flex direction="column" height="100svh" align="center" paddingX="18" paddingY="12" gapY="6">
