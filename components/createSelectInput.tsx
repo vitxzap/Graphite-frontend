@@ -1,14 +1,21 @@
 "use client";
 import { Select, Portal, createListCollection } from "@chakra-ui/react";
 import { useMemo, useState, useEffect } from "react";
+import storage from "local-storage";
 export default function CreateSelectInput(props: any) {
-	console.log(props.data);
 	const [dataLoaded, setDataLoaded] = useState([]);
+	const [value, setValue] = useState<any>({
+		filter: props.data.filter,
+		value: undefined,
+		item: [{}],
+	});
+	const [hostId, setHostId] = useState<number | undefined>(undefined);
+	const [isEnable, setIsEnable] = useState<boolean>(false);
 	const items = useMemo(() => {
 		return createListCollection({
 			items: dataLoaded ?? [],
-            itemToString: (data) => data.name,
-            itemToValue: (data) => data.name
+			itemToString: (data) => data.name,
+			itemToValue: (data) => data.name,
 		});
 	}, [dataLoaded]);
 	useEffect(() => {
@@ -19,18 +26,52 @@ export default function CreateSelectInput(props: any) {
 				});
 				const response = await res.json();
 				setDataLoaded(response);
-            }
-            else if (props.data.filter == "server") {
-                const res = await fetch("/api/server?id=", {
-                    method: "GET",
-                })
-            }
+				setIsEnable(false);
+			}
 		}
 		preloadData();
 	}, []);
 
+	useEffect(() => {
+		async function loadFilter() {
+			if (value.filter == "host") {
+				storage("hostId", value.item[0].id);
+			}
+		}
+		loadFilter();
+	}, [value]);
+
+	useEffect(() => {
+		async function loadHostById() {
+			if (props.data.filter == "server" && hostId != undefined) {
+				const res = await fetch(`/api/server?id=${hostId}`, {
+					method: "GET",
+				});
+				const response = await res.json();
+				setDataLoaded(response);
+			}
+		}
+		loadHostById();
+	}, [hostId]);
+
 	return (
-		<Select.Root collection={items} maxW="45%" size="lg">
+		<Select.Root
+			onClick={() => {
+				const id = storage("hostId");
+				setHostId(id);
+			}}
+			collection={items}
+			value={value.value}
+			onValueChange={(e) => {
+				setValue({
+					filter: props.data.filter,
+					value: e.value,
+					item: e.items,
+				});
+			}}
+			maxW="45%"
+			disabled={isEnable}
+			size="lg">
 			<Select.HiddenSelect />
 			<Select.Label fontSize="md">{props.data.title}</Select.Label>
 			<Select.Control>

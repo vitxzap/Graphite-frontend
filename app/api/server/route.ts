@@ -3,11 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 const localUrl = url + "server";
 async function GET(req: NextRequest) {
-    const search = req.nextUrl.searchParams;
-    const id = search.get("id")
+	const search = req.nextUrl.searchParams;
+	
+	const id = search.get("id")
+	console.log(id)
     const res = await fetch(`${localUrl}?id=${id}`);
-    const response = await res.json()
-	return NextResponse.json(response, {status: 200});
+	const response = await res.json()
+	
+	return NextResponse.json(response, { status: 200 });
+	
 }
 
 

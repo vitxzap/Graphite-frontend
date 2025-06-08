@@ -1,10 +1,11 @@
 import { url } from "../url";
 import axios from "axios";
 import { NextResponse, NextRequest } from "next/server";
-const localUrl = "http://localhost:3001/host";
+const localUrl = url + "host";
 async function GET() {
 	const res = await fetch(localUrl);
 	const response = await res.json();
+	
 	return NextResponse.json(response, { status: 200 });
 }
 
