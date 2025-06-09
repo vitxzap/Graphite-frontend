@@ -57,7 +57,7 @@ export default function CreateSelectInput(props: any) {
 	return (
 		<Select.Root
 			onClick={() => {
-				const id = storage("hostId");
+				const id = storage("hostId");	
 				setHostId(id);
 			}}
 			collection={items}

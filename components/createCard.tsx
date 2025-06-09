@@ -5,6 +5,8 @@ import { useCardContext } from "@/app/context/cardContext";
 import { cardInfo, insertData } from "@/app/types/types";
 import { useForm } from "react-hook-form";
 import CreateSelectInput from "./createSelectInput";
+import storage from "local-storage";
+import axios from "axios";
 function CreateCards(props: any) {
 	const cards = props.cards;
 	const { setCard } = useCardContext();
@@ -17,6 +19,7 @@ function CreateCards(props: any) {
 				onClick={() => {
 					setCard(item);
 					setIsSelected(item.title);
+					storage("hostId", null);
 				}}
 				paddingY="2"
 				cursor="pointer"
@@ -37,7 +40,21 @@ function CreateCards(props: any) {
 
 function CreateInput() {
 	const { register, handleSubmit, reset } = useForm<insertData>();
-	const onSubmit = handleSubmit((data) => console.log(data));
+	const onSubmit = handleSubmit((data) => {
+		async function post() {
+			if (selectedCard?.title == "Novo host") {
+				const res = await fetch("/api/host", {
+					method: "POST",
+					body: JSON.stringify({
+						value: data.name
+					})
+				});
+				const response = await res.json();
+				return response;
+			}
+		}
+		post();
+	});
 	const { card }: cardInfo = useCardContext();
 	const [selectedCard, setSelectedCard] = useState<cardInfo | undefined>(undefined);
 	useEffect(() => {
@@ -54,19 +71,9 @@ function CreateInput() {
 					</Field.Root>
 				)}
 			</For>
-			<For each={selectedCard?.selectInput}>
-				{(item) => (
-					<CreateSelectInput data={item} key={item.value} />
-				)}
-			</For>
+			<For each={selectedCard?.selectInput}>{(item) => <CreateSelectInput data={item} key={item.value} />}</For>
 			<Flex w="100%" justifyContent={"flex-end"} marginTop="4">
-				{selectedCard != undefined ? (
-					<Button type="submit" onClick={() => {}}>
-						Criar {selectedCard.title?.toLowerCase()}
-					</Button>
-				) : (
-					""
-				)}
+				{selectedCard != undefined ? <Button type="submit">Criar {selectedCard.title?.toLowerCase()}</Button> : ""}
 			</Flex>
 		</form>
 	);
