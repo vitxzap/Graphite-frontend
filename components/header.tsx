@@ -1,5 +1,5 @@
 "use client";
-import { Flex, SegmentGroup, } from "@chakra-ui/react";
+import { Flex, SegmentGroup } from "@chakra-ui/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -44,9 +44,8 @@ export default function Header() {
 							onClick={() => {
 								setPage(option.title);
 								setTimeout(() => {
-									router.push(option.route)
-								}, 200)
-                                
+									router.push(option.route);
+								}, 200);
 							}}>
 							<SegmentGroup.ItemText>{option.title}</SegmentGroup.ItemText>
 						</SegmentGroup.Item>
