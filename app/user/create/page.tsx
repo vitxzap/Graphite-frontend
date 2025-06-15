@@ -47,7 +47,7 @@ export default function Create() {
 		setTimeout(() => {
 			reset();
 			location.reload();
-		}, 2600);
+		}, 3200);
 	});
 	const [loading, setLoading] = useState<boolean>(false);
 	const [clientColletion, setclientColletion] = useState<any>();
@@ -136,8 +136,8 @@ export default function Create() {
 											</Select.Control>
 
 											<Portal>
-												<Select.Positioner>
-													<Select.Content>
+												<Select.Positioner >
+													<Select.Content maxH="170px">
 														<For each={collection.items}>
 															{(client, index) => (
 																<Select.Item item={client} key={index}>
