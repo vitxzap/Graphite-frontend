@@ -85,10 +85,10 @@ export default function Create() {
 		reset();
 	}, []);
 	return (
-		<Flex height="vh" maxW="vw" width="vw" direction="column" overflowX="hidden">
+		<Flex maxW="vw" width="vw" direction="column" maxH="vh" overflowX="hidden">
 			<Header />
 			<Toaster />
-			<Flex direction="column" justifyContent="center" alignItems="center" width="full" minHeight="100%">
+			<Flex direction="column" justifyContent="center" alignItems="center" width="full" height="dvh">
 				<Flex maxW="1/2" gap="4" direction="column" width="83.3333%" border="gray" borderStyle="solid" borderWidth="thin" borderColor="#E4E4E7" borderRadius="sm" padding="6">
 					<Flex direction="column" gap="2">
 						<Heading size="2xl">Documentar problema</Heading>
@@ -109,7 +109,7 @@ export default function Create() {
 										<Field.Label>
 											<Text fontSize="md">Descrição / Instrução</Text>
 										</Field.Label>
-										<Textarea size="xl" placeholder="Descreva o problema ou instrua a resolução" autoresize maxH={190} maxLength={700} {...register("problemDescription")} />
+										<Textarea size="xl" placeholder="Descreva o problema ou instrua a resolução" autoresize maxH={165} maxLength={700} {...register("problemDescription")} />
 										<Field.HelperText>Max 700 caracteres.</Field.HelperText>
 									</Field.Root>
 									<Field.Root>
@@ -154,7 +154,7 @@ export default function Create() {
 										<Field.Label>
 											<Text fontSize="md">Query</Text>
 										</Field.Label>
-										<Textarea fontFamily="mono" size="xl" placeholder="Query de solução para o problema" autoresize maxH={230} maxLength={6000} {...register("problemQuery")} />
+										<Textarea fontFamily="mono" size="xl" placeholder="Query de solução para o problema" autoresize maxH={165} maxLength={6000} {...register("problemQuery")} />
 										<Field.HelperText>Max 6.000 caracteres.</Field.HelperText>
 									</Field.Root>
 									<Dialog.Root placement="center">
