@@ -1,8 +1,23 @@
-"use client"
-import { Flex, Button, Card, Center, Field, Stack, Input, Table, Text, Heading, Select, Portal, createListCollection, Separator } from "@chakra-ui/react";
+"use client";
+import { Flex, Button, Card, Center, Field, Stack, Input, Table, Tag, Heading, Select, Portal, createListCollection, Separator, Drawer, CloseButton } from "@chakra-ui/react";
 import Header from "../../../components/header";
+import { useState } from "react";
 import DefaultBox from "@/components/defaultBox";
+import { LuCircleUser } from "react-icons/lu";
+type drawer = {
+	render?: boolean;
+	data?: {
+		title?: string;
+		description?: string;
+		client?: string;
+		query?: string;
+	};
+};
+
 export default function Search() {
+	const [drawerInfo, setDrawerInfo] = useState<drawer>({
+		render: false,
+	});
 	const frameworks = createListCollection({
 		items: [
 			{ label: "Pepsico MX", value: "react" },
@@ -12,7 +27,7 @@ export default function Search() {
 		],
 	});
 	const items = [
-		{ id: 1, name: "Check Integration Error", category: "Pepsico MX", price: "Testing..." },
+		{ id: 1, name: "Check Integration Error", category: "Pepsico MX", price: "Default Description for testing" },
 		{ id: 2, name: "Check Syncronization Error", category: "Heineken BR", price: "Testing..." },
 		{ id: 3, name: "Check SAP Odata Error", category: "MSD Atlas", price: "Testing..." },
 		{ id: 4, name: "High CPU Utilization", category: "Pepsico Pilot", price: "Testing..." },
@@ -40,8 +55,8 @@ export default function Search() {
 				<DefaultBox gap={2}>
 					<Flex>
 						<Heading>Filtrar</Heading>
-                    </Flex>
-                    <Separator variant="solid" />
+					</Flex>
+					<Separator variant="solid" />
 					<Flex gap={4}>
 						<Field.Root>
 							<Input type="text" size="md" placeholder="Nome" />
@@ -51,7 +66,7 @@ export default function Search() {
 								<Select.HiddenSelect />
 								<Select.Control>
 									<Select.Trigger>
-										<Select.ValueText placeholder="Select framework" />
+										<Select.ValueText placeholder="Cliente" />
 									</Select.Trigger>
 									<Select.IndicatorGroup>
 										<Select.Indicator />
@@ -75,7 +90,7 @@ export default function Search() {
 				</DefaultBox>
 				<DefaultBox>
 					<Table.ScrollArea maxH={"2xl"}>
-						<Table.Root size="lg" interactive stickyHeader >
+						<Table.Root size="lg" interactive stickyHeader>
 							<Table.Header>
 								<Table.Row>
 									<Table.ColumnHeader>Nome</Table.ColumnHeader>
@@ -85,7 +100,19 @@ export default function Search() {
 							</Table.Header>
 							<Table.Body>
 								{items.map((item) => (
-									<Table.Row key={item.id} cursor={"pointer"}>
+									<Table.Row
+										key={item.id}
+										cursor={"pointer"}
+										onClick={() => {
+											setDrawerInfo({
+												render: true,
+												data: {
+													title: item.name,
+													description: item.price,
+													client: item.category,
+												},
+											});
+										}}>
 										<Table.Cell>{item.name}</Table.Cell>
 										<Table.Cell>{item.category}</Table.Cell>
 										<Table.Cell textAlign="end">{item.price}</Table.Cell>
@@ -96,6 +123,33 @@ export default function Search() {
 					</Table.ScrollArea>
 				</DefaultBox>
 			</Flex>
+			<Drawer.Root open={drawerInfo.render} onOpenChange={(e) => setDrawerInfo({ render: e.open })} size={"lg"}>
+				<Portal>
+					<Drawer.Backdrop />
+					<Drawer.Positioner>
+						<Drawer.Content offset={"normal"}>
+							<Drawer.Header maxWidth={"10/12"}>
+								<Flex direction={"column"}>
+									<Drawer.Title>{drawerInfo.data?.title}</Drawer.Title>
+									<Tag.Root size={"lg"} variant={"solid"} colorPalette={"blue"} width={"max-content"}>
+										<Tag.StartElement>
+											<LuCircleUser />
+										</Tag.StartElement>
+										<Tag.Label>{drawerInfo.data?.client}</Tag.Label>
+									</Tag.Root>
+								</Flex>
+							</Drawer.Header>
+							<Drawer.Body>
+								<Heading>{drawerInfo.data?.description}</Heading>
+							</Drawer.Body>
+							<Drawer.Footer></Drawer.Footer>
+							<Drawer.CloseTrigger asChild>
+								<CloseButton size="md" />
+							</Drawer.CloseTrigger>
+						</Drawer.Content>
+					</Drawer.Positioner>
+				</Portal>
+			</Drawer.Root>
 		</Flex>
 	);
 }

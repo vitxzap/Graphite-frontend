@@ -10,9 +10,9 @@ export default function Home() {
 	const router = useRouter();
 	
 	return (
-		<Center h="vh" bg="white" color="black">
+		<Center h="vh">
 			<Toaster />
-			<Card.Root maxW="" scale={{base: "0.9", md: "1"}}  >
+			<Card.Root scale={{base: "0.9", md: "1"}}  >
 				<Card.Header>
 					<Card.Title fontSize="xl">Entrar no sistema</Card.Title>
 					<Card.Description>Preencha os dados para acessar o site.</Card.Description>
@@ -21,7 +21,7 @@ export default function Home() {
 					<Stack gap="4" w="full">
 						<Field.Root>
 							<Field.Label>E-mail</Field.Label>
-							<Input size="lg"  type="email" />
+							<Input size="lg" type="email" />
 						</Field.Root>
 						<Field.Root>
 							<Field.Label>Senha</Field.Label>
