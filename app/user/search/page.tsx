@@ -1,7 +1,7 @@
 "use client"
 import { Flex, Button, Card, Center, Field, Stack, Input, Table, Text, Heading, Select, Portal, createListCollection, Separator } from "@chakra-ui/react";
 import Header from "../../../components/header";
-
+import DefaultBox from "@/components/defaultBox";
 export default function Search() {
 	const frameworks = createListCollection({
 		items: [
@@ -37,7 +37,7 @@ export default function Search() {
 		<Flex minH="vh" maxW="vw" w="vw" direction="column" maxH="vh">
 			<Header />
 			<Flex w="full" direction="column" height={"dvh"} padding="2" gap={5} maxH={"dvh"}>
-				<Flex gap={2} border="gray" borderStyle="solid" borderWidth="thin" borderColor="#E4E4E7" borderRadius="md" padding="2" direction={"column"}>
+				<DefaultBox gap={2}>
 					<Flex>
 						<Heading>Filtrar</Heading>
                     </Flex>
@@ -72,10 +72,10 @@ export default function Search() {
 							</Select.Root>
 						</Field.Root>
 					</Flex>
-				</Flex>
-				<Flex maxW="vw" direction="column" width="100%" border="gray" borderStyle="solid" borderWidth="thin" borderColor="#E4E4E7" borderRadius="md" padding="2">
+				</DefaultBox>
+				<DefaultBox>
 					<Table.ScrollArea maxH={"2xl"}>
-						<Table.Root size="lg" interactive stickyHeader>
+						<Table.Root size="lg" interactive stickyHeader >
 							<Table.Header>
 								<Table.Row>
 									<Table.ColumnHeader>Nome</Table.ColumnHeader>
@@ -94,7 +94,7 @@ export default function Search() {
 							</Table.Body>
 						</Table.Root>
 					</Table.ScrollArea>
-				</Flex>
+				</DefaultBox>
 			</Flex>
 		</Flex>
 	);

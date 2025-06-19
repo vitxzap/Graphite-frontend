@@ -34,8 +34,8 @@ export default function Home() {
 						variant="solid"
 						onClick={() => {
 							toaster.create({
-								description: "Under construction",
-								type: "error",
+								description: "Em desenvolvimento.",
+								type: "info",
 							});
 							setTimeout(() => {
 								router.push("/user/home");

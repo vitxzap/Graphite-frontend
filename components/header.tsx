@@ -2,6 +2,7 @@
 import { Flex, SegmentGroup } from "@chakra-ui/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ColorModeButton } from "./ui/color-mode";
 
 export default function Header() {
 	const path = usePathname();
@@ -31,27 +32,39 @@ export default function Header() {
 	}, []);
 
 	return (
-		<Flex w="vw" padding="2" h="max-content" bg="#FAFAFA" borderBottomColor="#E4E4E7" borderBottomWidth="1px" justifyContent="space-between" alignItems="center">
+		<Flex
+			w="vw"
+			padding="2"
+			h="max-content"
+			bg={{ base: "#FAFAFA", _dark: "#09090b" }}
+			borderBottomColor={{ base: "#E4E4E7", _dark: "#323232" }}
+			borderBottomWidth="1px"
+			justifyContent="space-between"
+			alignItems="center">
 			Project v1.0
-			<SegmentGroup.Root value={page}>
-				<SegmentGroup.Indicator bg="#fff" />
-				{item.map((option) => {
-					return (
-						<SegmentGroup.Item
-							value={option.title}
-							key={option.route}
-							cursor="pointer"
-							onClick={() => {
-								setPage(option.title);
-								setTimeout(() => {
-									router.push(option.route);
-								}, 200);
-							}}>
-							<SegmentGroup.ItemText>{option.title}</SegmentGroup.ItemText>
-						</SegmentGroup.Item>
-					);
-				})}
-			</SegmentGroup.Root>
+			
+			<Flex gap={3} align={"center"} >
+				<ColorModeButton />
+				<SegmentGroup.Root value={page}>
+					<SegmentGroup.Indicator />
+					{item.map((option) => {
+						return (
+							<SegmentGroup.Item
+								value={option.title}
+								key={option.route}
+								cursor="pointer"
+								onClick={() => {
+									setPage(option.title);
+									setTimeout(() => {
+										router.push(option.route);
+									}, 200);
+								}}>
+								<SegmentGroup.ItemText>{option.title}</SegmentGroup.ItemText>
+							</SegmentGroup.Item>
+						);
+					})}
+				</SegmentGroup.Root>
+			</Flex>
 		</Flex>
 	);
 }

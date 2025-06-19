@@ -4,7 +4,7 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import Header from "../../../components/header";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
-
+import DefaultBox from "@/components/defaultBox";
 interface createProblem {
 	problemName: string;
 	problemDescription: string;
@@ -89,7 +89,7 @@ export default function Create() {
 			<Header />
 			<Toaster />
 			<Flex direction="column" justifyContent="center" alignItems="center" width="full" height="dvh">
-				<Flex maxW="1/2" gap="4" direction="column" width="83.3333%" border="gray" borderStyle="solid" borderWidth="thin" borderColor="#E4E4E7" borderRadius="sm" padding="6">
+				<DefaultBox width="1/2" gap={4} padding="6">
 					<Flex direction="column" gap="2">
 						<Heading size="2xl">Documentar problema</Heading>
 						<Text color="fg.muted">Utilize os campos abaixo para documentar um novo alerta.</Text>
@@ -190,7 +190,7 @@ export default function Create() {
 							</Fieldset.Root>
 						</form>
 					</Flex>
-				</Flex>
+				</DefaultBox>
 			</Flex>
 		</Flex>
 	);
