@@ -33,9 +33,8 @@ export default function Header() {
 
 	return (
 		<Flex
-			w="vw"
+			style={{width: "100%", maxWidth: "100%"}}
 			padding="2"
-			h="max-content"
 			bg={{ base: "#FAFAFA", _dark: "#09090b" }}
 			borderBottomColor={{ base: "#E4E4E7", _dark: "#323232" }}
 			borderBottomWidth="1px"

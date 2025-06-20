@@ -15,8 +15,28 @@ interface client {
 	nm_client: string;
 	id_client: string;
 }
+interface formError {
+	isErr?: boolean;
+	data?: {
+		message?: string;
+	};
+}
+type formValidation = {
+	dialog: {
+		isReadyToOpen?: boolean;
+	};
+};
+
 export default function Create() {
 	const { register, handleSubmit, reset, setValue } = useForm<createProblem>();
+	const emptyInputErrorMessage = "Esse campo não pode estar vazio.";
+	const [nameError, setNameError] = useState(false);
+	const [clientError, setClientError] = useState(false);
+	const [validateForm, setValidateForm] = useState<formValidation>({
+		dialog: {
+			isReadyToOpen: false,
+		},
+	});
 	const submit = handleSubmit(async (data) => {
 		const c = await fetch("/api/create", {
 			method: "POST",
@@ -27,27 +47,6 @@ export default function Create() {
 				clientId: data.clientId,
 			}),
 		});
-		const promise = new Promise<void>((resolve) => {
-			setTimeout(() => resolve(), 2000);
-		});
-		toaster.promise(promise, {
-			success: {
-				title: "Documentação criada com sucesso!",
-				description: "Você já pode buscá-la em seu dashboard",
-			},
-			error: {
-				title: "Ocorreu um erro",
-				description: "Sua documentação não foi criada, tente novamente mais tarde",
-			},
-			loading: {
-				title: "Documentando...",
-				description: "Sua documentação está sendo enviada, aguarde",
-			},
-		});
-		setTimeout(() => {
-			reset();
-			location.reload();
-		}, 3200);
 	});
 	const [loading, setLoading] = useState<boolean>(false);
 	const [clientColletion, setclientColletion] = useState<any>();
@@ -55,7 +54,7 @@ export default function Create() {
 		return createListCollection({
 			items: clientColletion ?? [
 				{
-					nm_client: "No data",
+					nm_client: "Não foi possível buscar os clientes.",
 					id_client: null,
 				},
 			],
@@ -64,31 +63,26 @@ export default function Create() {
 		});
 	}, [clientColletion]);
 	useEffect(() => {
-		async function getHost() {
+		async function getClient() {
 			try {
 				setLoading(true);
 				const res = await fetch("/api/client");
-				if (!res.ok) {
-					throw new Error(`Falha na api, status: ${res.status}`);
-				}
-				setTimeout(async () => {
-					const response: object = await res.json();
-					setclientColletion(response);
-				}, 2000);
+				const response: object = await res.json();
+				setclientColletion(response);
+				setLoading(false);
 			} catch (err) {
 				console.log(err);
-			} finally {
-				setTimeout(() => setLoading(false), 2000);
+				throw err;
 			}
 		}
-		getHost();
+		getClient();
 		reset();
 	}, []);
 	return (
-		<Flex maxW="vw" width="vw" direction="column" maxH="vh" overflowX="hidden">
+		<Flex direction="column">
 			<Header />
 			<Toaster />
-			<Flex direction="column" justifyContent="center" alignItems="center" width="full" height="dvh">
+			<Flex direction="column" height={"max-content"} justifyContent="center" alignItems="center" padding={2}>
 				<DefaultBox width="1/2" gap={4} padding="6">
 					<Flex direction="column" gap="2">
 						<Heading size="2xl">Documentar problema</Heading>
@@ -99,11 +93,12 @@ export default function Create() {
 						<form onSubmit={submit}>
 							<Fieldset.Root>
 								<Fieldset.Content>
-									<Field.Root required>
+									<Field.Root required invalid={nameError}>
 										<Field.Label>
 											<Text fontSize="md">Nome </Text> <Field.RequiredIndicator />
 										</Field.Label>
 										<Input type="text" size="xl" placeholder="Nomeie o problema" {...register("problemName")} />
+										<Field.ErrorText>{emptyInputErrorMessage}</Field.ErrorText>
 									</Field.Root>
 									<Field.Root>
 										<Field.Label>
@@ -112,11 +107,12 @@ export default function Create() {
 										<Textarea size="xl" placeholder="Descreva o problema ou instrua a resolução" autoresize maxH={165} maxLength={700} {...register("problemDescription")} />
 										<Field.HelperText>Max 700 caracteres.</Field.HelperText>
 									</Field.Root>
-									<Field.Root>
+									<Field.Root required invalid={clientError}>
 										<Field.Label>
-											<Text fontSize="md">Cliente</Text>
+											<Text fontSize="md">Cliente</Text> <Field.RequiredIndicator />
 										</Field.Label>
 										<Select.Root
+											size={"lg"}
 											collection={collection}
 											disabled={loading}
 											onValueChange={(e) => {
@@ -134,9 +130,8 @@ export default function Create() {
 													<Select.Indicator />
 												</Select.IndicatorGroup>
 											</Select.Control>
-
 											<Portal>
-												<Select.Positioner >
+												<Select.Positioner>
 													<Select.Content maxH="170px">
 														<For each={collection.items}>
 															{(client, index) => (
@@ -149,6 +144,7 @@ export default function Create() {
 												</Select.Positioner>
 											</Portal>
 										</Select.Root>
+										<Field.ErrorText>{emptyInputErrorMessage}</Field.ErrorText>
 									</Field.Root>
 									<Field.Root>
 										<Field.Label>
@@ -157,10 +153,36 @@ export default function Create() {
 										<Textarea fontFamily="mono" size="xl" placeholder="Query de solução para o problema" autoresize maxH={165} maxLength={6000} {...register("problemQuery")} />
 										<Field.HelperText>Max 6.000 caracteres.</Field.HelperText>
 									</Field.Root>
-									<Dialog.Root placement="center">
-										<Dialog.Trigger asChild>
-											<Button width="max">Documentar problema</Button>
-										</Dialog.Trigger>
+									<Button
+										width="max"
+										onClick={() => {
+											const catchData = handleSubmit((data) => {
+												setNameError(false);
+												setClientError(false);
+												if (data.problemName == undefined || data.problemName == "") {
+													setNameError(true);
+												}
+												if ((data.problemName == undefined || data.problemName == "") || (data.clientId == undefined || data.clientId == 0)) {
+													toaster.create({
+														closable: true,
+														type: "error",
+														description: "Existem campos vazios no formulário.",
+													});
+												}
+												if (data.clientId == undefined || data.clientId == 0) {
+													setClientError(true);
+												}
+												if ((data.problemName != "" && data.problemName != undefined) && (data.clientId != 0 && data.clientId != undefined)) {
+													setClientError(false);
+													setNameError(false);
+													setValidateForm({ dialog: { isReadyToOpen: true } });
+												}
+											});
+											catchData();
+										}}>
+										Documentar problema
+									</Button>
+									<Dialog.Root placement="center" open={validateForm.dialog.isReadyToOpen} onOpenChange={(e) => setValidateForm({ dialog: { isReadyToOpen: e.open } })}>
 										<Portal>
 											<Dialog.Backdrop />
 											<Dialog.Positioner>
@@ -175,7 +197,7 @@ export default function Create() {
 														<Dialog.ActionTrigger asChild>
 															<Button variant="outline">Revisar</Button>
 														</Dialog.ActionTrigger>
-														<Button type="submit" onClick={submit}>
+														<Button type="submit" onClick={submit} colorPalette={"green"}>
 															Documentar
 														</Button>
 													</Dialog.Footer>
