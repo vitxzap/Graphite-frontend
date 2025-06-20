@@ -38,18 +38,36 @@ export default function Create() {
 		},
 	});
 	const submit = handleSubmit(async (data) => {
-		const c = await fetch("/api/create", {
-			method: "POST",
-			body: JSON.stringify({
-				problemName: data.problemName,
-				problemDescription: data.problemDescription,
-				problemQuery: data.problemQuery,
-				clientId: data.clientId,
-			}),
+		const fetchData = new Promise(async (resolve, reject) => {
+			try {
+				const c = await fetch("/api/create", {
+					method: "POST",
+					body: JSON.stringify({
+						problemName: data.problemName,
+						problemDescription: data.problemDescription,
+						problemQuery: data.problemQuery,
+						clientId: data.clientId,
+					}),
+				});
+				resolve(null)
+			} catch (err) {
+				reject(err);
+			}
+		});
+		toaster.promise(fetchData, {
+			success: {
+				title: "Sucesso!"
+			},
+			loading: {
+				title: "Criando..."
+			},
+			error: {
+				title: "Erro"
+			}
 		});
 	});
 	const [loading, setLoading] = useState<boolean>(false);
-	const [clientColletion, setclientColletion] = useState<any>();
+	const [clientColletion, setClientColletion] = useState<any>();
 	const collection = useMemo(() => {
 		return createListCollection({
 			items: clientColletion ?? [
@@ -68,10 +86,14 @@ export default function Create() {
 				setLoading(true);
 				const res = await fetch("/api/client");
 				const response: object = await res.json();
-				setclientColletion(response);
+				setClientColletion(response);
 				setLoading(false);
 			} catch (err) {
-				console.log(err);
+				setLoading(false);
+				toaster.create({
+					type: "error",
+					title: "Erro ao buscar clientes na api.",
+				})
 				throw err;
 			}
 		}
@@ -162,7 +184,7 @@ export default function Create() {
 												if (data.problemName == undefined || data.problemName == "") {
 													setNameError(true);
 												}
-												if ((data.problemName == undefined || data.problemName == "") || (data.clientId == undefined || data.clientId == 0)) {
+												if (data.problemName == undefined || data.problemName == "" || data.clientId == undefined || data.clientId == 0) {
 													toaster.create({
 														closable: true,
 														type: "error",
@@ -172,7 +194,7 @@ export default function Create() {
 												if (data.clientId == undefined || data.clientId == 0) {
 													setClientError(true);
 												}
-												if ((data.problemName != "" && data.problemName != undefined) && (data.clientId != 0 && data.clientId != undefined)) {
+												if (data.problemName != "" && data.problemName != undefined && data.clientId != 0 && data.clientId != undefined) {
 													setClientError(false);
 													setNameError(false);
 													setValidateForm({ dialog: { isReadyToOpen: true } });
