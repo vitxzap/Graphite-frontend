@@ -11,13 +11,17 @@ interface createProblem {
 async function POST(req: NextRequest) {
 	try {
 		const data: createProblem = await req.json();
-		await axios.post(localUrl, {
+		const c = await axios.post(localUrl, {
 			clientId: data.clientId,
 			problemName: data.problemName,
 			problemDescription: data.problemDescription,
 			problemQuery: data.problemQuery,
 		});
-		return NextResponse.next()
+		const status = c.status;
+		if (status != 201) {
+			throw new Error(`Erro código: ${c.status}`);
+		}
+		return NextResponse.json({ status: status });
 	} catch (err) {
 		throw err;
 	}

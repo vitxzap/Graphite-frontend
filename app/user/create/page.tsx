@@ -48,22 +48,36 @@ export default function Create() {
 						problemQuery: data.problemQuery,
 						clientId: data.clientId,
 					}),
-				});
-				resolve(null)
+				})
+				console.log(c)
+				if (c.status != 200) {
+					reject(new Error("Erro ao buscar dados."));
+					return;
+				}
+				resolve(null);
 			} catch (err) {
 				reject(err);
+			}
+			finally {
+				setTimeout(() => {
+					reset();
+					location.reload();
+				}, 2000)
 			}
 		});
 		toaster.promise(fetchData, {
 			success: {
-				title: "Sucesso!"
+				title: "Sucesso!",
+				description: "Sua documentação foi criada com sucesso.",
 			},
 			loading: {
-				title: "Criando..."
+				title: "Criando...",
+				description: "Por favor, aguarde um momento.",
 			},
 			error: {
-				title: "Erro"
-			}
+				title: "Erro",
+				description: "Houve algum erro ao gerar a documentação. Tente novamente mais tarde.",
+			},
 		});
 	});
 	const [loading, setLoading] = useState<boolean>(false);
@@ -93,7 +107,7 @@ export default function Create() {
 				toaster.create({
 					type: "error",
 					title: "Erro ao buscar clientes na api.",
-				})
+				});
 				throw err;
 			}
 		}
@@ -181,6 +195,7 @@ export default function Create() {
 											const catchData = handleSubmit((data) => {
 												setNameError(false);
 												setClientError(false);
+
 												if (data.problemName == undefined || data.problemName == "") {
 													setNameError(true);
 												}
@@ -219,9 +234,11 @@ export default function Create() {
 														<Dialog.ActionTrigger asChild>
 															<Button variant="outline">Revisar</Button>
 														</Dialog.ActionTrigger>
-														<Button type="submit" onClick={submit} colorPalette={"green"}>
-															Documentar
-														</Button>
+														<Dialog.ActionTrigger>
+															<Button type="submit" onClick={submit} colorPalette={"green"}>
+																Documentar
+															</Button>
+														</Dialog.ActionTrigger>
 													</Dialog.Footer>
 													<Dialog.CloseTrigger asChild>
 														<CloseButton size="md" />
