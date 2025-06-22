@@ -1,12 +1,18 @@
 "use client";
-import { Flex, SegmentGroup } from "@chakra-ui/react";
+import { Flex, SegmentGroup, Button } from "@chakra-ui/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ColorModeButton } from "./ui/color-mode";
-
+import { signOut } from "next-auth/react";
 export default function Header() {
 	const path = usePathname();
 	const router = useRouter();
+	const logOut = async () => {
+		await signOut({
+			redirect: true,
+			callbackUrl: "/auth/login"
+		});
+	}
 	const [page, setPage] = useState<any>("");
 	const item = [
 		{
@@ -44,6 +50,7 @@ export default function Header() {
 			
 			<Flex gap={3} align={"center"} >
 				<ColorModeButton />
+				<Button onClick={logOut} variant={"subtle"}>Sign Out</Button>
 				<SegmentGroup.Root value={page}>
 					<SegmentGroup.Indicator />
 					{item.map((option) => {
