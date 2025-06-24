@@ -1,15 +1,22 @@
-import { Flex, Button, Card, Center, Field, Stack, Input, Heading } from "@chakra-ui/react";
-import Header from "../../../components/SidebarMenu"
+import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
+import {
+  Flex,
+  Button,
+  Card,
+  Center,
+  Field,
+  Stack,
+  Input,
+  Heading,
+} from "@chakra-ui/react";
 
 export default function Home() {
-    
-    return (
-        <Flex height="dvh" maxW="vw" w="vw" direction="column" >
-            <Header />
-            <Center style={{ height: "100%" }}>
-                
-                <Heading size={"6xl"} >Under construction</Heading>
-            </Center>
-        </Flex>
-    );    
+  return (
+    <Flex h={"vh"} w={"vw"} padding={4} direction={"column"} gap={2}>
+        <Heading size={"4xl"} fontWeight={"extrabold"}>Dashboard</Heading>
+      <Flex w={"100%"} height={"100%"}>
+        <Skeleton variant={"shine"} flex={"1"} boxSize={"100%"}></Skeleton>
+      </Flex>
+    </Flex>
+  );
 }

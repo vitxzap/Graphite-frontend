@@ -1,19 +1,33 @@
 "use client";
-import { Flex, Button, Card, Center, Field, Stack, Input, Table, Tag, Heading, Select, Portal, createListCollection, Separator, Drawer, CloseButton } from "@chakra-ui/react";
-import Header from "../../../components/SidebarMenu";
-import { useState } from "react";
-import DefaultBox from "@/components/defaultBox";
-import { LuCircleUser } from "react-icons/lu";
-
+import {
+  Flex,
+  Button,
+  Card,
+  Center,
+  Field,
+  Stack,
+  Input,
+  Table,
+  Tag,
+  Heading,
+  Select,
+  Portal,
+  createListCollection,
+  Separator,
+  Drawer,
+  CloseButton,
+  Skeleton,
+} from "@chakra-ui/react";
 
 export default function Search() {
-	return (
-		<Flex minH="vh" maxW="vw" w="vw" h={"vh"} direction="column" maxH="vh">
-			<Header />
-			<Flex> {/* content flex */}
-				
-
-			</Flex>
-		</Flex>
-	);
+  return (
+    <Flex h={"vh"} w={"vw"} padding={4} direction={"column"} gap={2}>
+      <Heading size={"4xl"} fontWeight={"extrabold"}>
+        Buscar
+      </Heading>
+      <Flex w={"100%"} height={"100%"}>
+        <Skeleton flex={"1"} boxSize={"100%"}></Skeleton>
+      </Flex>
+    </Flex>
+  );
 }
