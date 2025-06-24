@@ -1,7 +1,7 @@
 "use client";
 import { Dialog, CloseButton, Flex, Heading, Separator, Text, Field, Select, Input, Textarea, Fieldset, createListCollection, Button, Portal, For, Spinner } from "@chakra-ui/react";
 import { Toaster, toaster } from "@/components/ui/toaster";
-import Header from "../../../components/header";
+import Header from "../../../components/SidebarMenu";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import DefaultBox from "@/components/defaultBox";

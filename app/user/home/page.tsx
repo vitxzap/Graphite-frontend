@@ -1,5 +1,5 @@
 import { Flex, Button, Card, Center, Field, Stack, Input, Heading } from "@chakra-ui/react";
-import Header from "../../../components/header"
+import Header from "../../../components/SidebarMenu"
 
 export default function Home() {
     
