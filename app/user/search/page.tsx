@@ -21,7 +21,7 @@ import {
 
 export default function Search() {
   return (
-    <Flex h={"vh"} w={"vw"} padding={4} direction={"column"} gap={2}>
+    <Flex h={"vh"} w={"vw"} padding={6} direction={"column"} gap={2}>
       <Heading size={"4xl"} fontWeight={"extrabold"}>
         Buscar
       </Heading>

@@ -74,7 +74,7 @@ export default function Header() {
             <Flex
               key={i}
               rounded={3}
-              bg={data.pagePath == path ? "fg.muted" : {}}
+              bg={data.pagePath == path ? "gray.muted" : {}}
               padding={2}
               align={"center"}
               cursor={"pointer"}
