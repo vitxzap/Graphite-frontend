@@ -1,13 +1,14 @@
-
-import Provider from "./provider"
+import Provider from "./provider";
 import { Flex, Theme } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import AuthProvider from "./lib/auth/provider/provider";
 import Header from "@/components/SidebarMenu";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-})
+});
 export default function RootLayout({
   children,
 }: {
@@ -16,12 +17,12 @@ export default function RootLayout({
   return (
     <html className={inter.className} suppressHydrationWarning>
       <head />
-      <body style={{margin: 0, boxSizing: "border-box"}}>
+      <body style={{ margin: 0, boxSizing: "border-box" }}>
         <AuthProvider>
           <Provider>
-            <Flex >
-              <Header />                
-                  {children}
+            <Flex>
+              <Header />
+              {children}
             </Flex>
           </Provider>
         </AuthProvider>

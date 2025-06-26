@@ -31,7 +31,7 @@ export default function Header() {
       icon: <RxDashboard />,
     },
     {
-      page: "Buscar problemas",
+      page: "Problemas",
       pagePath: "/user/search",
       icon: <BiSearch />,
     },
