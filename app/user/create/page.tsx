@@ -219,34 +219,6 @@ export default function Create() {
 										}}>
 										Documentar problema
 									</Button>
-									<Dialog.Root placement="center" open={validateForm.dialog.isReadyToOpen} onOpenChange={(e) => setValidateForm({ dialog: { isReadyToOpen: e.open } })}>
-										<Portal>
-											<Dialog.Backdrop />
-											<Dialog.Positioner>
-												<Dialog.Content>
-													<Dialog.Header>
-														<Dialog.Title>Confirmação</Dialog.Title>
-													</Dialog.Header>
-													<Dialog.Body>
-														<p>Antes de documentar o problema, certifique-se de que preencheu corretamente todos os campos disponíveis.</p>
-													</Dialog.Body>
-													<Dialog.Footer>
-														<Dialog.ActionTrigger asChild>
-															<Button variant="outline">Revisar</Button>
-														</Dialog.ActionTrigger>
-														<Dialog.ActionTrigger>
-															<Button type="submit" onClick={submit} colorPalette={"green"}>
-																Documentar
-															</Button>
-														</Dialog.ActionTrigger>
-													</Dialog.Footer>
-													<Dialog.CloseTrigger asChild>
-														<CloseButton size="md" />
-													</Dialog.CloseTrigger>
-												</Dialog.Content>
-											</Dialog.Positioner>
-										</Portal>
-									</Dialog.Root>
 								</Fieldset.Content>
 							</Fieldset.Root>
 						</form>

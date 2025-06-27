@@ -3,7 +3,7 @@ import { Flex, Theme } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import AuthProvider from "./lib/auth/provider/provider";
 import Header from "@/components/SidebarMenu";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 const inter = Inter({
   subsets: ["latin"],
