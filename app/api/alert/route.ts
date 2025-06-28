@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { url } from "../url";
-const localUrl = url + "problem";
+const localUrl = url + "alert";
 import axios from "axios";
-interface createProblem {
-  problemName: string;
-  problemDescription?: string;
-  problemQuery?: string;
+interface createAlert {
+  alertName: string;
+  alertDescription?: string;
+  alertQuery?: string;
   clientId: number;
 }
 async function POST(req: NextRequest) {
   try {
-    const data: createProblem = await req.json();
+    const data: createAlert = await req.json();
     const c = await axios.post(localUrl, {
       clientId: data.clientId,
-      problemName: data.problemName,
-      problemDescription: data.problemDescription,
-      problemQuery: data.problemQuery,
+      alertName: data.alertName,
+      alertDescription: data.alertDescription,
+      alertQuery: data.alertQuery,
     });
     const status = c.status;
     if (status != 201) {

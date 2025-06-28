@@ -23,11 +23,11 @@ import { MdErrorOutline } from "react-icons/md";
 import { TbError404 } from "react-icons/tb";
 import CreateAlertDialog from "./createAlertDialog";
 
-type Problem = {
-  nm_problem: string;
-  id_problem: number;
-  desc_problem: string;
-  query_problem: string;
+type Alert = {
+  nm_alert: string;
+  id_alert: number;
+  desc_alert: string;
+  query_alert: string;
   tb_client: {
     id_client: number;
     nm_client: string;
@@ -35,7 +35,7 @@ type Problem = {
 };
 async function fetchAllAlerts() {
   try {
-    const rawData = await fetch("/api/problem", {
+    const rawData = await fetch("/api/alert", {
       method: "GET",
     });
     if (!rawData.ok) {
@@ -54,7 +54,7 @@ async function fetchAllAlerts() {
 export default function Search() {
   const { open, onOpen, onClose } = useDisclosure();
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["problems"],
+    queryKey: ["alerts"],
     queryFn: fetchAllAlerts,
   });
   return (
@@ -141,11 +141,11 @@ export default function Search() {
               </Table.Header>
               <Table.Body>
                 <For each={data}>
-                  {(item: Problem, index) => (
+                  {(item: Alert, index) => (
                     <Table.Row key={index} cursor={"pointer"}>
-                      <Table.Cell>{item.nm_problem}</Table.Cell>
+                      <Table.Cell>{item.nm_alert}</Table.Cell>
                       <Table.Cell maxWidth={"36em"}>
-                        <Text truncate>{item.desc_problem}</Text>
+                        <Text truncate>{item.desc_alert}</Text>
                       </Table.Cell>
                       <Table.Cell>
                         <Tag.Root>
@@ -154,7 +154,7 @@ export default function Search() {
                       </Table.Cell>
                       <Table.Cell textAlign="end">
                         <Code variant={"surface"} maxWidth={"25em"}>
-                          <Text truncate={true}>{item.query_problem}</Text>
+                          <Text truncate={true}>{item.query_alert}</Text>
                         </Code>
                       </Table.Cell>
                     </Table.Row>

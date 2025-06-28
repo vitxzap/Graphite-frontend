@@ -20,9 +20,9 @@ import { LuClipboardPenLine } from "react-icons/lu";
 import { useEffect, useState } from "react";
 
 interface CreateAlert {
-  problemName: string;
-  problemDescription: string;
-  problemQuery?: string;
+  alertName: string;
+  alertDescription: string;
+  alertQuery?: string;
   clientId?: number;
 }
 
@@ -54,7 +54,7 @@ const CreateAlertDialog = (props: DialogProps) => {
                       <Input
                         type="text"
                         size="sm"
-                        placeholder="Nomeie o problema"
+                        placeholder="Nomeie o alerta"
                       />
                       <Field.ErrorText></Field.ErrorText>
                     </Field.Root>
@@ -72,7 +72,7 @@ const CreateAlertDialog = (props: DialogProps) => {
                       </Field.Label>
                       <Textarea
                         size="sm"
-                        placeholder="Descreva o problema ou instrua a resolução"
+                        placeholder="Descreva o alerta ou instrua a resolução"
                         autoresize
                         maxH={165}
                         maxLength={700}
@@ -86,7 +86,7 @@ const CreateAlertDialog = (props: DialogProps) => {
                       <Textarea
                         fontFamily="mono"
                         size="sm"
-                        placeholder="Query de solução para o problema"
+                        placeholder="Query de solução para o alerta"
                         autoresize
                         maxH={165}
                         maxLength={6000}
