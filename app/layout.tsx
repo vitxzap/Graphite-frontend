@@ -1,10 +1,11 @@
+"use client";
 import Provider from "./provider";
 import { Flex, Theme } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import AuthProvider from "./lib/auth/provider/provider";
 import Header from "@/components/SidebarMenu";
-import { QueryClient } from "@tanstack/react-query";
-const queryClient = new QueryClient();
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -14,6 +15,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const path = usePathname();
+  useEffect(() => {
+    console.log(path);
+  }, []);
   return (
     <html className={inter.className} suppressHydrationWarning>
       <head />
@@ -21,7 +26,7 @@ export default function RootLayout({
         <AuthProvider>
           <Provider>
             <Flex>
-              <Header />
+              {path != "/auth/login" ? <Header /> : undefined}
               {children}
             </Flex>
           </Provider>

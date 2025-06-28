@@ -7,7 +7,7 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import { LuCircleUser } from "react-icons/lu";
-const drawerInfo = (props: object) => {
+const AlertDrawer = (props: object) => {
   return (
     <Drawer.Root size={"lg"}>
       <Portal>
@@ -44,4 +44,4 @@ const drawerInfo = (props: object) => {
   );
 };
 
-export default drawerInfo
+export default AlertDrawer;

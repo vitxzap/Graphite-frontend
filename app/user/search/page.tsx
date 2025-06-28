@@ -3,37 +3,25 @@ import {
   Flex,
   For,
   Heading,
-  Skeleton,
   Table,
-  Text,
-  Portal,
   EmptyState,
-  DialogRootProvider,
-  Dialog,
   VStack,
-  useDialog,
   Tag,
-  CloseButton,
   Input,
   Button,
   Field,
+  Text,
   Spinner,
   Code,
   InputGroup,
-  Icon,
-  Textarea,
-  Select,
-  Fieldset,
-  Combobox,
-  createListCollection,
-  useFilter,
-  useListCollection,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { HiPlus } from "react-icons/hi";
-import { LuClipboardPenLine, LuSearch } from "react-icons/lu";
+import { LuSearch } from "react-icons/lu";
 import { MdErrorOutline } from "react-icons/md";
 import { TbError404 } from "react-icons/tb";
+import CreateAlertDialog from "./createAlertDialog";
 
 type Problem = {
   nm_problem: string;
@@ -45,17 +33,7 @@ type Problem = {
     nm_client: string;
   };
 };
-interface createProblem {
-  problemName: string;
-  problemDescription: string;
-  problemQuery?: string;
-  clientId?: number;
-}
-interface client {
-  nm_client: string;
-  id_client: string;
-}
-async function fetchAllProblems() {
+async function fetchAllAlerts() {
   try {
     const rawData = await fetch("/api/problem", {
       method: "GET",
@@ -64,6 +42,9 @@ async function fetchAllProblems() {
       throw new Error("Something went wrong");
     }
     const data = await rawData.json();
+    if (data.length == 0) {
+      return 0;
+    }
     return data;
   } catch (err) {
     throw err;
@@ -71,142 +52,17 @@ async function fetchAllProblems() {
 }
 
 export default function Search() {
-  const dialog = useDialog();
-  const { contains } = useFilter({ sensitivity: "base" });
+  const { open, onOpen, onClose } = useDisclosure();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["problems"],
-    queryFn: fetchAllProblems,
+    queryFn: fetchAllAlerts,
   });
-  const frameworks = createListCollection({
-    items: [
-      { label: "Pepsico BR", value: "react" },
-      { label: "Mondelez BR", value: "vue" },
-      { label: "BRF", value: "angular" },
-      { label: "CBL", value: "svelte" },
-    ],
-  });
-  const { collection, filter } = useListCollection({
-    initialItems: frameworks,
-    filter: contains,
-  });
-
   return (
     <Flex h={"vh"} w={"vw"} padding={6} direction={"column"} gap={4}>
-      <Dialog.RootProvider value={dialog} scrollBehavior={"inside"} size={"lg"}>
-        <Portal>
-          <Dialog.Backdrop />
-          <Dialog.Positioner>
-            <Dialog.Content>
-              <Dialog.Header>
-                <Flex direction={"column"}>
-                  <Dialog.Title>Documentar alerta</Dialog.Title>
-                </Flex>
-              </Dialog.Header>
-              <Dialog.Body>
-                <form>
-                  <Fieldset.Root>
-                    <Fieldset.Content>
-                      <Field.Root required>
-                        <Field.Label>
-                          <Text fontSize={"sm"}>Nome</Text>
-                          <Field.RequiredIndicator />
-                        </Field.Label>
-                        <Input
-                          type="text"
-                          size="sm"
-                          placeholder="Nomeie o problema"
-                        />
-                        <Field.ErrorText></Field.ErrorText>
-                      </Field.Root>
-                      <Field.Root required>
-                        <Field.Label>
-                          <Text fontSize="sm">Cliente</Text>{" "}
-                          <Field.RequiredIndicator />
-                        </Field.Label>
-                        <Combobox.Root
-                          openOnClick
-                          collection={collection}
-                          onInputValueChange={(e) => filter(e.inputValue)}
-                          width="full"
-                        >
-                          <Combobox.Control>
-                            <Combobox.Input placeholder="Toque para buscar" />
-                            <Combobox.IndicatorGroup>
-                              <Combobox.ClearTrigger />
-                              <Combobox.Trigger />
-                            </Combobox.IndicatorGroup>
-                          </Combobox.Control>
-                          <Combobox.Positioner>
-                            <Combobox.Content>
-                              <Combobox.Empty>Nada encontrado</Combobox.Empty>
-                              {collection.items.map((item: any) => (
-                                <Combobox.Item item={item} key={item.value}>
-                                  {item.label}
-                                  <Combobox.ItemIndicator />
-                                </Combobox.Item>
-                              ))}
-                            </Combobox.Content>
-                          </Combobox.Positioner>
-                        </Combobox.Root>
-                        <Field.ErrorText></Field.ErrorText>
-                      </Field.Root>
-                      <Field.Root>
-                        <Field.Label>
-                          <Text fontSize="sm">Descrição / Instrução</Text>
-                        </Field.Label>
-                        <Textarea
-                          size="sm"
-                          placeholder="Descreva o problema ou instrua a resolução"
-                          autoresize
-                          maxH={165}
-                          maxLength={700}
-                        />
-                        <Field.HelperText>Max 700 caracteres.</Field.HelperText>
-                      </Field.Root>
-
-                      <Field.Root>
-                        <Field.Label>
-                          <Text fontSize="sm">Query</Text>
-                        </Field.Label>
-                        <Textarea
-                          fontFamily="mono"
-                          size="sm"
-                          placeholder="Query de solução para o problema"
-                          autoresize
-                          maxH={165}
-                          maxLength={6000}
-                        />
-                        <Field.HelperText>
-                          Max 6.000 caracteres.
-                        </Field.HelperText>
-                      </Field.Root>
-                    </Fieldset.Content>
-                  </Fieldset.Root>
-                </form>
-              </Dialog.Body>
-              <Dialog.Footer>
-                <Dialog.ActionTrigger asChild>
-                  <Button variant="subtle" colorPalette={"red"}>
-                    Cancelar
-                  </Button>
-                </Dialog.ActionTrigger>
-                <Button colorPalette={"green"}>
-                  <Icon scale={0.8}>
-                    <LuClipboardPenLine />
-                  </Icon>
-                  Documentar
-                </Button>
-              </Dialog.Footer>
-              <Dialog.CloseTrigger asChild>
-                <CloseButton size="sm" />
-              </Dialog.CloseTrigger>
-            </Dialog.Content>
-          </Dialog.Positioner>
-        </Portal>
-      </Dialog.RootProvider>
       <Heading size={"4xl"} fontWeight={"extrabold"}>
         Buscar alertas
       </Heading>
+      <CreateAlertDialog isOpen={open} onClose={onClose} />
       <Flex w={"100%"} height={"100%"} direction={"column"}>
         {isLoading == true && isError == false ? (
           <Flex
@@ -261,9 +117,7 @@ export default function Search() {
                   width={"min"}
                   size={"sm"}
                   colorPalette={"green"}
-                  onClick={() => {
-                    dialog.setOpen(true);
-                  }}
+                  onClick={onOpen}
                 >
                   <HiPlus />
                   Nova Documentação
@@ -290,14 +144,18 @@ export default function Search() {
                   {(item: Problem, index) => (
                     <Table.Row key={index} cursor={"pointer"}>
                       <Table.Cell>{item.nm_problem}</Table.Cell>
-                      <Table.Cell>{item.desc_problem}</Table.Cell>
+                      <Table.Cell maxWidth={"36em"}>
+                        <Text truncate>{item.desc_problem}</Text>
+                      </Table.Cell>
                       <Table.Cell>
                         <Tag.Root>
                           <Tag.Label>{item.tb_client.nm_client}</Tag.Label>
                         </Tag.Root>
                       </Table.Cell>
                       <Table.Cell textAlign="end">
-                        <Code variant={"surface"}>{item.query_problem}</Code>
+                        <Code variant={"surface"} maxWidth={"25em"}>
+                          <Text truncate={true}>{item.query_problem}</Text>
+                        </Code>
                       </Table.Cell>
                     </Table.Row>
                   )}
@@ -308,7 +166,7 @@ export default function Search() {
         ) : (
           <></>
         )}
-        {data == undefined && data?.length >= 1 ? (
+        {data == 0 ? (
           <Flex
             height={"full"}
             width={"full"}
@@ -325,8 +183,22 @@ export default function Search() {
                     Parece que não há nada aqui...
                   </EmptyState.Title>
                   <EmptyState.Description>
-                    A busca pelas documentações não encontrou nenhum dado. Tente
-                    novamente mais tarde.
+                    <Flex direction={"column"} align={"center"} justify={"center"}  gap={3}>
+                      <Text maxW={"60%"}>
+                        A busca pelas documentações não encontrou nenhum dado.
+                        Tente novamente mais tarde, ou crie uma nova
+                        documentação!
+                      </Text>
+                      <Button
+                        width={"min"}
+                        size={"sm"}
+                        colorPalette={"green"}
+                        onClick={onOpen}
+                      >
+                        <HiPlus />
+                        Nova Documentação
+                      </Button>
+                    </Flex>
                   </EmptyState.Description>
                 </VStack>
               </EmptyState.Content>
