@@ -2,7 +2,6 @@
 import {
   Combobox,
   HStack,
-  Portal,
   Spinner,
   useFilter,
   Text,
@@ -23,7 +22,7 @@ async function fetchAllClients() {
 }
 type Client = {
   nm_client: string;
-  id_client: number;
+  id_client: string;
 };
 const ClientCombobox = () => {
   const { contains } = useFilter({ sensitivity: "base" });
@@ -34,13 +33,13 @@ const ClientCombobox = () => {
   const { collection, filter } = useListCollection<Client>({
     initialItems: data,
     itemToString: (item) => item.nm_client,
-    itemToValue: (item) => item.id_client as number,
+    itemToValue: (item) => item.id_client as string,
     filter: contains,
   });
   return (
     <Combobox.Root
       collection={collection}
-      openOnClick
+      openOnClick={true}
       onClick={() => {
         filter("");
       }}

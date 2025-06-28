@@ -1,4 +1,4 @@
-import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Flex, Heading } from "@chakra-ui/react";
 export default function Home() {
   return (

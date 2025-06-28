@@ -31,7 +31,7 @@ const AlertDrawer = (props: object) => {
               </Flex>
             </Drawer.Header>
             <Drawer.Body>
-              <Heading></Heading>
+              <Heading>p</Heading>
             </Drawer.Body>
             <Drawer.Footer></Drawer.Footer>
             <Drawer.CloseTrigger asChild>

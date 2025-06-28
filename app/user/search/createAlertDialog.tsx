@@ -2,7 +2,6 @@ import {
   Button,
   CloseButton,
   Dialog,
-  DialogPropsProvider,
   Field,
   Fieldset,
   Flex,
@@ -11,13 +10,9 @@ import {
   Portal,
   Text,
   Textarea,
-  useDialog,
-  useDialogContext,
 } from "@chakra-ui/react";
 import ClientCombobox from "./clientCombobox";
-import { useQuery } from "@tanstack/react-query";
 import { LuClipboardPenLine } from "react-icons/lu";
-import { useEffect, useState } from "react";
 
 interface CreateAlert {
   alertName: string;

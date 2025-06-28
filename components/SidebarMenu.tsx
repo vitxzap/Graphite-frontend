@@ -6,9 +6,6 @@ import {
   Text,
   Menu,
   Portal,
-  Button,
-  Drawer,
-  CloseButton,
   Icon,
   Separator,
 } from "@chakra-ui/react";
@@ -19,10 +16,12 @@ import { RxDashboard } from "react-icons/rx";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { toaster, Toaster } from "./ui/toaster";
+import { useState } from "react";
 export default function Header() {
   const router = useRouter();
   const { data } = useSession();
   const path = usePathname();
+  const [menu, setMenu] = useState(false)
   const pages = [
     {
       page: "Dashboard",
@@ -52,30 +51,7 @@ export default function Header() {
       minW={"13.5%"}
     >
       <Toaster />
-      <Menu.Root>
-        <Menu.Trigger asChild>
-          <Flex
-            align={"center"}
-            justify={"space-between"}
-            style={{ width: "100%" }}
-            gap={1}
-          >
-            <Flex
-              align={"center"}
-              cursor={"pointer"}
-              width={"full"}
-              gap={1}
-            >
-              <Avatar.Root size={"xs"} scale={0.8}>
-                <Avatar.Image src={data?.user?.image as string} />
-              </Avatar.Root>
-              <Heading size={"sm"}>{data?.user?.name}</Heading>
-            </Flex>
-            <Flex>
-              <ColorModeButton size={"xs"} scale={0.8} />
-            </Flex>
-          </Flex>
-        </Menu.Trigger>
+      <Menu.Root open={menu} onOpenChange={(e) => setMenu(e.open)}>
         <Portal>
           <Menu.Positioner>
             <Menu.Content>
@@ -122,6 +98,22 @@ export default function Header() {
           </Menu.Positioner>
         </Portal>
       </Menu.Root>
+      <Flex
+        align={"center"}
+        justify={"space-between"}
+        style={{ width: "100%" }}
+        gap={1}
+      >
+        <Flex align={"center"} cursor={"pointer"} width={"full"} gap={1} onClick={() => setMenu(!menu)}>
+          <Avatar.Root size={"xs"} scale={0.8}>
+            <Avatar.Image src={data?.user?.image as string} />
+          </Avatar.Root>
+          <Heading size={"sm"}>{data?.user?.name}</Heading>
+        </Flex>
+        <Flex>
+          <ColorModeButton size={"xs"} scale={0.8} />
+        </Flex>
+      </Flex>
       <Flex direction={"column"} gap={2}>
         {pages.map((data, i) => {
           return (
