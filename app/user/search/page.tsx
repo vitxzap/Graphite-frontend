@@ -22,17 +22,9 @@ import { LuSearch } from "react-icons/lu";
 import { MdErrorOutline } from "react-icons/md";
 import { TbError404 } from "react-icons/tb";
 import CreateAlertDialog from "./createAlertDialog";
-
-type Alert = {
-  nm_alert: string;
-  id_alert: number;
-  desc_alert: string;
-  query_alert: string;
-  tb_client: {
-    id_client: number;
-    nm_client: string;
-  };
-};
+import AlertDrawer from "./alertDrawer";
+import { useState } from "react";
+import { Alert } from "./types";
 async function fetchAllAlerts() {
   try {
     const rawData = await fetch("/api/alert", {
@@ -43,7 +35,7 @@ async function fetchAllAlerts() {
     }
     const data = await rawData.json();
     if (data.length == 0) {
-      return 0;
+      return [];
     }
     return data;
   } catch (err) {
@@ -53,6 +45,12 @@ async function fetchAllAlerts() {
 
 export default function Search() {
   const { open, onOpen, onClose } = useDisclosure();
+  const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null);
+  const {
+    open: AlertOpen,
+    onOpen: onAlertOpen,
+    onClose: onAlertClose,
+  } = useDisclosure();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["alerts"],
     queryFn: fetchAllAlerts,
@@ -63,6 +61,11 @@ export default function Search() {
         Buscar alertas
       </Heading>
       <CreateAlertDialog isOpen={open} onClose={onClose} />
+      <AlertDrawer
+        isOpen={AlertOpen}
+        onClose={onAlertClose}
+        data={selectedAlert}
+      />
       <Flex w={"100%"} height={"100%"} direction={"column"}>
         {isLoading == true && isError == false ? (
           <Flex
@@ -142,10 +145,17 @@ export default function Search() {
               <Table.Body>
                 <For each={data}>
                   {(item: Alert, index) => (
-                    <Table.Row key={index} cursor={"pointer"}>
+                    <Table.Row
+                      key={index}
+                      cursor={"pointer"}
+                      onClick={() => {
+                        onAlertOpen();
+                        setSelectedAlert(item);
+                      }}
+                    >
                       <Table.Cell>{item.nm_alert}</Table.Cell>
                       <Table.Cell maxWidth={"36em"}>
-                        <Text truncate>{item.desc_alert}</Text>
+                        <Text truncate>{item.desc_alert} </Text>
                       </Table.Cell>
                       <Table.Cell>
                         <Tag.Root>
@@ -153,9 +163,13 @@ export default function Search() {
                         </Tag.Root>
                       </Table.Cell>
                       <Table.Cell textAlign="end">
-                        <Code variant={"surface"} maxWidth={"25em"}>
-                          <Text truncate={true}>{item.query_alert}</Text>
-                        </Code>
+                        {item.query_alert == "" ? (
+                          <Text color={"fg.muted"}>Sem query</Text>
+                        ) : (
+                          <Code variant={"surface"} maxWidth={"full"}>
+                            <Text>{item.query_alert}</Text>
+                          </Code>
+                        )}
                       </Table.Cell>
                     </Table.Row>
                   )}
@@ -166,7 +180,7 @@ export default function Search() {
         ) : (
           <></>
         )}
-        {data == 0 ? (
+        {data == [] ? (
           <Flex
             height={"full"}
             width={"full"}
@@ -183,7 +197,12 @@ export default function Search() {
                     Parece que não há nada aqui...
                   </EmptyState.Title>
                   <EmptyState.Description>
-                    <Flex direction={"column"} align={"center"} justify={"center"}  gap={3}>
+                    <Flex
+                      direction={"column"}
+                      align={"center"}
+                      justify={"center"}
+                      gap={3}
+                    >
                       <Text maxW={"60%"}>
                         A busca pelas documentações não encontrou nenhum dado.
                         Tente novamente mais tarde, ou crie uma nova

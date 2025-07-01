@@ -13,18 +13,7 @@ import {
 } from "@chakra-ui/react";
 import ClientCombobox from "./clientCombobox";
 import { LuClipboardPenLine } from "react-icons/lu";
-
-interface CreateAlert {
-  alertName: string;
-  alertDescription: string;
-  alertQuery?: string;
-  clientId?: number;
-}
-
-type DialogProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
+import { DialogProps } from "./types";
 const CreateAlertDialog = (props: DialogProps) => {
   return (
     <Dialog.Root open={props.isOpen} scrollBehavior={"inside"} size={"lg"}>
