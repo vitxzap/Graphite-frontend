@@ -17,8 +17,11 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { toaster, Toaster } from "./ui/toaster";
 import { useState } from "react";
+import { useRef } from "react";
 export default function Header() {
   const router = useRouter();
+  const ref = useRef<HTMLDivElement | null>(null)
+  const getAnchorRect = () => ref.current!.getBoundingClientRect()
   const { data } = useSession();
   const path = usePathname();
   const [menu, setMenu] = useState(false)
@@ -51,7 +54,7 @@ export default function Header() {
       minW={"13.5%"}
     >
       <Toaster />
-      <Menu.Root open={menu} onOpenChange={(e) => setMenu(e.open)}>
+      <Menu.Root open={menu} onOpenChange={(e) => setMenu(e.open)} positioning={{ getAnchorRect }}>
         <Portal>
           <Menu.Positioner>
             <Menu.Content>
@@ -103,6 +106,7 @@ export default function Header() {
         justify={"space-between"}
         style={{ width: "100%" }}
         gap={1}
+        ref={ref}
       >
         <Flex align={"center"} cursor={"pointer"} width={"full"} gap={1} onClick={() => setMenu(!menu)}>
           <Avatar.Root size={"xs"} scale={0.8}>

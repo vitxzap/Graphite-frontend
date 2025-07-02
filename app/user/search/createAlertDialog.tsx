@@ -65,6 +65,17 @@ const CreateAlertDialog = (props: DialogProps) => {
                     </Field.Root>
                     <Field.Root>
                       <Field.Label>
+                        <Text fontSize={"sm"}>Links</Text>
+                      </Field.Label>
+                      <Input
+                        type="text"
+                        size="sm"
+                        placeholder="Links relacionados ao alerta"
+                      />
+                      <Field.ErrorText></Field.ErrorText>
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>
                         <Text fontSize="sm">Query</Text>
                       </Field.Label>
                       <Textarea

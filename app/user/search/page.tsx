@@ -35,7 +35,7 @@ async function fetchAllAlerts() {
     }
     const data = await rawData.json();
     if (data.length == 0) {
-      return [];
+      return "";
     }
     return data;
   } catch (err) {
@@ -180,7 +180,7 @@ export default function Search() {
         ) : (
           <></>
         )}
-        {data == [] ? (
+        {data == "" ? (
           <Flex
             height={"full"}
             width={"full"}
