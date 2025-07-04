@@ -3,13 +3,13 @@ import {
   Flex,
   For,
   Heading,
-  Table,
   EmptyState,
   VStack,
   Tag,
   Input,
   Button,
   Field,
+  Table,
   Text,
   Spinner,
   Code,
@@ -60,6 +60,7 @@ export default function Search() {
     <Flex
       h={"vh"}
       w={"vw"}
+      overflowY={"hidden"}
       padding={6}
       maxH={"vh"}
       direction={"column"}
@@ -135,15 +136,20 @@ export default function Search() {
                 </Button>
               </Flex>
             </Flex>
-            <Box style={{maxHeight: "70%"}}>
-              <Table.ScrollArea display={"flex"} maxHeight={"100%"} rounded={"md"} borderWidth={"1px"}>
+            
+              <Table.ScrollArea
+                display={"flex"}
+                style={{maxHeight: "82%"}}
+                rounded={"md"}
+                borderWidth={"1px"}
+              >
                 <Table.Root
                   size="md"
                   variant={"outline"}
                   interactive
-                  stickyHeader
+                  stickyHeader={true}
                 >
-                  <Table.Header position={"sticky"}>
+                  <Table.Header zIndex={1}>
                     <Table.Row>
                       <Table.ColumnHeader>Nome</Table.ColumnHeader>
                       <Table.ColumnHeader>Description</Table.ColumnHeader>
@@ -166,7 +172,7 @@ export default function Search() {
                         >
                           <Table.Cell>{item.nm_alert}</Table.Cell>
                           <Table.Cell maxWidth={"36em"}>
-                            <Text truncate>{item.desc_alert} </Text>
+                            {item.desc_alert.length == 0 ? (<Text color={"fg.muted"}>Sem descrição</Text>) : (<Text>{item.desc_alert}</Text>)} 
                           </Table.Cell>
                           <Table.Cell>
                             <Tag.Root>
@@ -177,8 +183,8 @@ export default function Search() {
                             {item.query_alert == "" ? (
                               <Text color={"fg.muted"}>Sem query</Text>
                             ) : (
-                              <Code variant={"surface"} maxWidth={"full"}>
-                                <Text>{item.query_alert}</Text>
+                              <Code variant={"surface"}>
+                                <Text maxWidth={"240px"} truncate>{item.query_alert}</Text>
                               </Code>
                             )}
                           </Table.Cell>
@@ -188,7 +194,7 @@ export default function Search() {
                   </Table.Body>
                 </Table.Root>
               </Table.ScrollArea>
-            </Box>
+           
           </Flex>
         ) : (
           <></>

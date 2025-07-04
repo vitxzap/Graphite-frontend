@@ -6,6 +6,7 @@ import AuthProvider from "./lib/auth/provider/provider";
 import Header from "@/components/SidebarMenu";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
