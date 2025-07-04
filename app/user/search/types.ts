@@ -8,10 +8,22 @@ export type Alert = {
     nm_client: string;
   };
 };
-
+export interface formErrorHandler {
+  name?: formErrorHandlerCamps,
+  client?: formErrorHandlerCamps,
+}
+type formErrorHandlerCamps = {
+  message?: string | undefined;
+  invalid?: boolean
+};
 export interface DialogProps {
   isOpen: boolean;
   onClose: () => void;
-};
-
-
+}
+export interface CreateAlertInput {
+  name: string;
+  description: string;
+  clientId: number;
+  query: string;
+  link: string;
+}

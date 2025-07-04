@@ -8,6 +8,8 @@ import {
   useListCollection,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import { CreateAlertInput, formErrorHandler } from "./types";
+import { useForm, useFormContext } from "react-hook-form";
 async function fetchAllClients() {
   try {
     const rawData = await fetch("/api/client");
@@ -24,7 +26,8 @@ type Client = {
   nm_client: string;
   id_client: string;
 };
-const ClientCombobox = () => {
+const ClientCombobox = (props: { error: formErrorHandler | undefined }) => {
+  const { setValue } = useFormContext<CreateAlertInput>();
   const { contains } = useFilter({ sensitivity: "base" });
   const { data, isLoading } = useQuery({
     queryKey: ["clients"],
@@ -38,8 +41,13 @@ const ClientCombobox = () => {
   });
   return (
     <Combobox.Root
+      invalid={props.error?.client?.invalid}
       collection={collection}
       openOnClick={true}
+      onValueChange={(e) => {
+        const id = Number(e.value);
+        setValue("clientId", id)
+      }}
       onClick={() => {
         filter("");
       }}
@@ -47,7 +55,7 @@ const ClientCombobox = () => {
       width="full"
     >
       <Combobox.Control>
-        <Combobox.Input placeholder="Type to search" />
+        <Combobox.Input placeholder="Digite para buscar " />
         <Combobox.IndicatorGroup>
           <Combobox.ClearTrigger />
           <Combobox.Trigger />

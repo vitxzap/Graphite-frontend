@@ -5,6 +5,7 @@ import axios from "axios";
 interface createAlert {
   alertName: string;
   alertDescription?: string;
+  alertLink?: string;
   alertQuery?: string;
   clientId: number;
 }
@@ -14,6 +15,7 @@ async function POST(req: NextRequest) {
     const c = await axios.post(localUrl, {
       clientId: data.clientId,
       alertName: data.alertName,
+      alertLink: data.alertLink,
       alertDescription: data.alertDescription,
       alertQuery: data.alertQuery,
     });

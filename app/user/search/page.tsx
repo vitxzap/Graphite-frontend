@@ -15,6 +15,7 @@ import {
   Code,
   InputGroup,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { HiPlus } from "react-icons/hi";
@@ -56,7 +57,14 @@ export default function Search() {
     queryFn: fetchAllAlerts,
   });
   return (
-    <Flex h={"vh"} w={"vw"} padding={6} direction={"column"} gap={4}>
+    <Flex
+      h={"vh"}
+      w={"vw"}
+      padding={6}
+      maxH={"vh"}
+      direction={"column"}
+      gap={4}
+    >
       <Heading size={"4xl"} fontWeight={"extrabold"}>
         Buscar alertas
       </Heading>
@@ -108,7 +116,7 @@ export default function Search() {
           <></>
         )}
         {isLoading == false && isError == false && data.length > 0 ? (
-          <Flex direction={"column"} width={"full"} height={"full"} gap={4}>
+          <Flex direction={"column"} width={"full"} maxH={"100%"} gap={4}>
             <Flex>
               <Flex direction={"row"} width={"full"} gap={4}>
                 <Field.Root>
@@ -127,55 +135,60 @@ export default function Search() {
                 </Button>
               </Flex>
             </Flex>
-            <Table.Root
-              size="md"
-              variant={"outline"}
-              rounded={"sm"}
-              interactive
-              stickyHeader
-            >
-              <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeader>Nome</Table.ColumnHeader>
-                  <Table.ColumnHeader>Description</Table.ColumnHeader>
-                  <Table.ColumnHeader>Cliente</Table.ColumnHeader>
-                  <Table.ColumnHeader textAlign="end">Query</Table.ColumnHeader>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                <For each={data}>
-                  {(item: Alert, index) => (
-                    <Table.Row
-                      key={index}
-                      cursor={"pointer"}
-                      onClick={() => {
-                        onAlertOpen();
-                        setSelectedAlert(item);
-                      }}
-                    >
-                      <Table.Cell>{item.nm_alert}</Table.Cell>
-                      <Table.Cell maxWidth={"36em"}>
-                        <Text truncate>{item.desc_alert} </Text>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Tag.Root>
-                          <Tag.Label>{item.tb_client.nm_client}</Tag.Label>
-                        </Tag.Root>
-                      </Table.Cell>
-                      <Table.Cell textAlign="end">
-                        {item.query_alert == "" ? (
-                          <Text color={"fg.muted"}>Sem query</Text>
-                        ) : (
-                          <Code variant={"surface"} maxWidth={"full"}>
-                            <Text>{item.query_alert}</Text>
-                          </Code>
-                        )}
-                      </Table.Cell>
+            <Box style={{maxHeight: "70%"}}>
+              <Table.ScrollArea display={"flex"} maxHeight={"100%"} rounded={"md"} borderWidth={"1px"}>
+                <Table.Root
+                  size="md"
+                  variant={"outline"}
+                  interactive
+                  stickyHeader
+                >
+                  <Table.Header position={"sticky"}>
+                    <Table.Row>
+                      <Table.ColumnHeader>Nome</Table.ColumnHeader>
+                      <Table.ColumnHeader>Description</Table.ColumnHeader>
+                      <Table.ColumnHeader>Cliente</Table.ColumnHeader>
+                      <Table.ColumnHeader textAlign="end">
+                        Query
+                      </Table.ColumnHeader>
                     </Table.Row>
-                  )}
-                </For>
-              </Table.Body>
-            </Table.Root>
+                  </Table.Header>
+                  <Table.Body>
+                    <For each={data}>
+                      {(item: Alert, index) => (
+                        <Table.Row
+                          key={index}
+                          cursor={"pointer"}
+                          onClick={() => {
+                            onAlertOpen();
+                            setSelectedAlert(item);
+                          }}
+                        >
+                          <Table.Cell>{item.nm_alert}</Table.Cell>
+                          <Table.Cell maxWidth={"36em"}>
+                            <Text truncate>{item.desc_alert} </Text>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Tag.Root>
+                              <Tag.Label>{item.tb_client.nm_client}</Tag.Label>
+                            </Tag.Root>
+                          </Table.Cell>
+                          <Table.Cell textAlign="end">
+                            {item.query_alert == "" ? (
+                              <Text color={"fg.muted"}>Sem query</Text>
+                            ) : (
+                              <Code variant={"surface"} maxWidth={"full"}>
+                                <Text>{item.query_alert}</Text>
+                              </Code>
+                            )}
+                          </Table.Cell>
+                        </Table.Row>
+                      )}
+                    </For>
+                  </Table.Body>
+                </Table.Root>
+              </Table.ScrollArea>
+            </Box>
           </Flex>
         ) : (
           <></>
