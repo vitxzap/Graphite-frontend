@@ -12,16 +12,19 @@ import {
   IconButton,
   Popover,
   DataList,
+  Button,
 } from "@chakra-ui/react";
-
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { LuCircleUser } from "react-icons/lu";
 import { Alert } from "./types";
+import { useState } from "react";
 type AlertProps = {
   isOpen: boolean;
   onClose: () => void;
   data: Alert | null;
 };
 const AlertDrawer = (props: AlertProps) => {
+  const [unExtendQuery, setUnExtendQuery] = useState<boolean>(true);
   return (
     <Drawer.Root size={"lg"} open={props.isOpen} onOpenChange={props.onClose}>
       <Portal>
@@ -60,9 +63,20 @@ const AlertDrawer = (props: AlertProps) => {
                           <Flex mt={2}>
                             <DataList.Root size="sm">
                               <DataList.Item>
+                                <DataList.ItemLabel>
+                                  Número de projeto
+                                </DataList.ItemLabel>
+                                <DataList.ItemValue>
+                                  {props.data?.tb_client.num_project}
+                                </DataList.ItemValue>
+                              </DataList.Item>
+                              <DataList.Item>
                                 <DataList.ItemLabel>Host</DataList.ItemLabel>
                                 <DataList.ItemValue>
-                                  {props.data?.tb_client.tb_server.tb_host.nm_host}
+                                  {
+                                    props.data?.tb_client.tb_server.tb_host
+                                      .nm_host
+                                  }
                                 </DataList.ItemValue>
                               </DataList.Item>
                               <DataList.Item>
@@ -72,9 +86,14 @@ const AlertDrawer = (props: AlertProps) => {
                                 </DataList.ItemValue>
                               </DataList.Item>
                               <DataList.Item>
-                                <DataList.ItemLabel>Provider</DataList.ItemLabel>
+                                <DataList.ItemLabel>
+                                  Provedor
+                                </DataList.ItemLabel>
                                 <DataList.ItemValue>
-                                  {props.data?.tb_client.tb_server.tb_host.tb_cloud_provider.nm_cloud_provider}
+                                  {
+                                    props.data?.tb_client.tb_server.tb_host
+                                      .tb_cloud_provider.nm_cloud_provider
+                                  }
                                 </DataList.ItemValue>
                               </DataList.Item>
                             </DataList.Root>
@@ -101,15 +120,37 @@ const AlertDrawer = (props: AlertProps) => {
                         </IconButton>
                       </Clipboard.Trigger>
                     </Clipboard.Root>
+                    <Button
+                      width={"max"}
+                      variant={"outline"}
+                      size={"xs"}
+                      onClick={() => setUnExtendQuery(!unExtendQuery)}
+                    >
+                      {unExtendQuery == false ? (
+                        <Flex align={"center"} justify={"center"} gap={2}>
+                          <IoIosArrowDown />
+                          Recolher 
+                        </Flex>
+                      ) : (
+                        <Flex align={"center"} justify={"center"} gap={2}>
+                            <IoIosArrowForward/>
+                            Extender
+                        </Flex>
+                      )}
+                    </Button>
                   </Flex>
                   {props.data?.query_alert == "" ? (
                     <Text truncate={true} color={"fg.muted"}>
                       Não existe query para este alerta.
                     </Text>
                   ) : (
-                    <Code variant={"surface"} p={2} maxWidth={"full"}>
-                      <Text>{props.data?.query_alert}</Text>
-                    </Code>
+                    <Flex direction={"column"} maxWidth={"full"} gap={1}>
+                      <Code variant={"surface"} p={2} maxWidth={"full"}>
+                        <Text truncate={unExtendQuery} maxW={"full"}>
+                          {props.data?.query_alert}
+                        </Text>
+                      </Code>
+                    </Flex>
                   )}
                 </Flex>
               </Flex>

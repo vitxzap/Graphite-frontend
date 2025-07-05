@@ -10,6 +10,7 @@ import {
   Input,
   InputGroup,
   Portal,
+  Spinner,
   Text,
   Textarea,
 } from "@chakra-ui/react";
@@ -22,28 +23,29 @@ import { useQuery } from "@tanstack/react-query";
 const CreateAlertDialog = (props: DialogProps) => {
   const methods = useForm<CreateAlertInput>();
   const [alertData, setAlertData] = useState<CreateAlertInput>();
-  const { refetch, isLoading } = useQuery({
+  const { refetch, isLoading, status } = useQuery({
     queryKey: ["postAlert", alertData],
     queryFn: async ({ queryKey }) => {
       const [, data] = queryKey;
-        const c = await fetch("/api/alert", {
-          method: "POST",
-          body: JSON.stringify({
-            alertName: data.name,
-            alertDescription: data.description,
-            clientId: data.clientId,
-            alertQuery: data.query,
-            alertLink: data.link,
-          }),
-        });
-        if (!c.ok) {
-          throw new Error("Something went wrong.");
-        }
-        reset();
-        props.onClose();
-        return c.status;
+      const c = await fetch("/api/alert", {
+        method: "POST",
+        body: JSON.stringify({
+          alertName: data.name,
+          alertDescription: data.description,
+          clientId: data.clientId,
+          alertQuery: data.query,
+          alertLink: data.link,
+        }),
+      });
+      if (!c.ok) {
+        throw new Error("Something went wrong.");
+      }
+      reset();
+      props.onClose();
+      return c.status;
     },
     enabled: false,
+    
   });
   const { register, handleSubmit, reset } = methods;
   const [error, setError] = useState<formErrorHandler>();
@@ -94,7 +96,7 @@ const CreateAlertDialog = (props: DialogProps) => {
   });
   useEffect(() => {
     refetch();
-  }, [alertData])
+  }, [alertData]);
   return (
     <FormProvider {...methods}>
       <form onSubmit={submit}>
@@ -105,11 +107,11 @@ const CreateAlertDialog = (props: DialogProps) => {
               <Dialog.Content>
                 <Dialog.Header>
                   <Flex direction={"column"}>
-                    <Dialog.Title>Documentar alerta {isLoading.toString()}</Dialog.Title>
+                    <Dialog.Title>Documentar alerta</Dialog.Title>
                   </Flex>
                 </Dialog.Header>
                 <Dialog.Body>
-                  <Fieldset.Root >
+                  <Fieldset.Root>
                     <Fieldset.Content>
                       <Field.Root required invalid={error?.name?.invalid}>
                         <Field.Label>
@@ -194,11 +196,25 @@ const CreateAlertDialog = (props: DialogProps) => {
                       Cancelar
                     </Button>
                   </Dialog.ActionTrigger>
-                  <Button colorPalette={"green"} type="submit" onClick={submit} disabled={isLoading} >
-                    <Icon scale={0.8}>
-                      <LuClipboardPenLine />
-                    </Icon>
-                    Documentar
+                  <Button
+                    colorPalette={"green"}
+                    type="submit"
+                    onClick={submit}
+                    disabled={isLoading}
+                  >
+                    {isLoading == true ? (
+                      <Flex align={"center"} justify={"center"} gap={2}>
+                        <Spinner size={"sm"}/>
+                        Documentando...
+                      </Flex>
+                    ) : (
+                      <Flex align={"center"} justify={"center"} gap={2}>
+                        <Icon scale={0.8}>
+                          <LuClipboardPenLine />
+                        </Icon>
+                        Documentar
+                      </Flex>
+                    )}
                   </Button>
                 </Dialog.Footer>
                 <Dialog.CloseTrigger asChild>
