@@ -11,13 +11,13 @@ export default function Home() {
   const router = useRouter();
   const { status, data } = useSession();
   if (status == "authenticated") {
-    router.push("/user/home");
+    router.push("/user/search");
   }
   const handleClick = async () => {
     try {
       await signIn("google", {
         redirect: true,
-        callbackUrl: "/user/home",
+        callbackUrl: "/user/search",
       });
     } catch (err) {
       throw err;

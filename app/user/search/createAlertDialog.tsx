@@ -90,8 +90,6 @@ const CreateAlertDialog = (props: DialogProps) => {
       data.clientId
     ) {
       setAlertData(data);
-      
-      
     }
   });
   useEffect(() => {

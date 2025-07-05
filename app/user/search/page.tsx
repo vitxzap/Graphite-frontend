@@ -6,16 +6,15 @@ import {
   EmptyState,
   VStack,
   Tag,
+  Table,
   Input,
   Button,
   Field,
-  Table,
   Text,
   Spinner,
   Code,
   InputGroup,
   useDisclosure,
-  Box,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { HiPlus } from "react-icons/hi";
@@ -26,6 +25,7 @@ import CreateAlertDialog from "./createAlertDialog";
 import AlertDrawer from "./alertDrawer";
 import { useState } from "react";
 import { Alert } from "./types";
+
 async function fetchAllAlerts() {
   try {
     const rawData = await fetch("/api/alert", {
@@ -36,7 +36,7 @@ async function fetchAllAlerts() {
     }
     const data = await rawData.json();
     if (data.length == 0) {
-      return "";
+      return [];
     }
     return data;
   } catch (err) {
@@ -117,7 +117,7 @@ export default function Search() {
           <></>
         )}
         {isLoading == false && isError == false && data.length > 0 ? (
-          <Flex direction={"column"} width={"full"} maxH={"100%"} gap={4}>
+          <Flex direction={"column"} width={"full"} h={"100%"} gap={4}>
             <Flex>
               <Flex direction={"row"} width={"full"} gap={4}>
                 <Field.Root>
@@ -136,10 +136,15 @@ export default function Search() {
                 </Button>
               </Flex>
             </Flex>
-            
+            <Flex
+              direction={"column"}
+              width={"full"}
+              height={"100%"}
+              overflowY={"auto"}
+            >
               <Table.ScrollArea
                 display={"flex"}
-                style={{maxHeight: "82%"}}
+                style={{ maxHeight: "82%" }}
                 rounded={"md"}
                 borderWidth={"1px"}
               >
@@ -172,7 +177,11 @@ export default function Search() {
                         >
                           <Table.Cell>{item.nm_alert}</Table.Cell>
                           <Table.Cell maxWidth={"36em"}>
-                            {item.desc_alert.length == 0 ? (<Text color={"fg.muted"}>Sem descrição</Text>) : (<Text>{item.desc_alert}</Text>)} 
+                            {item.desc_alert.length == 0 ? (
+                              <Text color={"fg.muted"}>Sem descrição</Text>
+                            ) : (
+                              <Text truncate maxW={"80%"}>{item.desc_alert}</Text>
+                            )}
                           </Table.Cell>
                           <Table.Cell>
                             <Tag.Root>
@@ -184,7 +193,9 @@ export default function Search() {
                               <Text color={"fg.muted"}>Sem query</Text>
                             ) : (
                               <Code variant={"surface"}>
-                                <Text maxWidth={"240px"} truncate>{item.query_alert}</Text>
+                                <Text maxWidth={"20vw"} truncate>
+                                  {item.query_alert}
+                                </Text>
                               </Code>
                             )}
                           </Table.Cell>
@@ -194,12 +205,12 @@ export default function Search() {
                   </Table.Body>
                 </Table.Root>
               </Table.ScrollArea>
-           
+            </Flex>
           </Flex>
         ) : (
           <></>
         )}
-        {data == "" ? (
+        {data == "" && isLoading == false ? (
           <Flex
             height={"full"}
             width={"full"}
