@@ -13,6 +13,7 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { ColorModeButton } from "./ui/color-mode";
+import { LuCircleUser } from "react-icons/lu";
 import { signOut, useSession } from "next-auth/react";
 import { BiSearch } from "react-icons/bi";
 import { RxDashboard } from "react-icons/rx";
@@ -40,6 +41,11 @@ export default function Header() {
       pagePath: "/user/search",
       icon: <BiSearch />,
     },
+    {
+      page: "Clientes",
+      pagePath: "/user/client-info",
+      icon: <LuCircleUser />,
+    },
   ];
   const handleDisconnect = async () => {
     await signOut({ redirect: true, callbackUrl: "/auth/login" });
@@ -48,7 +54,7 @@ export default function Header() {
     <Flex
       direction={"column"}
       width={"max"}
-      minH={"vh"}
+      minH={"100%"}
       py={"4"}
       px={"2"}
       gap={"4"}

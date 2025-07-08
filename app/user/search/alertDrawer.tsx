@@ -26,7 +26,7 @@ type AlertProps = {
 const AlertDrawer = (props: AlertProps) => {
   const [unExtendQuery, setUnExtendQuery] = useState<boolean>(true);
   return (
-    <Drawer.Root size={"lg"} placement={"bottom"} open={props.isOpen} onOpenChange={props.onClose}>
+    <Drawer.Root size={"lg"} open={props.isOpen} onOpenChange={props.onClose}>
       <Portal>
         <Drawer.Backdrop />
         <Drawer.Positioner>

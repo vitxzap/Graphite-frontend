@@ -26,7 +26,7 @@ export default function RootLayout({
       <body style={{ margin: 0, boxSizing: "border-box" }}>
         <AuthProvider>
           <Provider>
-            <Flex>
+            <Flex >
               {path != "/auth/login" ? <Header /> : undefined}
               {children}
             </Flex>

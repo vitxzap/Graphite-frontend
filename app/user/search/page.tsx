@@ -15,6 +15,7 @@ import {
   Code,
   InputGroup,
   useDisclosure,
+  Portal,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { HiPlus } from "react-icons/hi";
@@ -69,12 +70,14 @@ export default function Search() {
       <Heading size={"4xl"} fontWeight={"extrabold"}>
         Buscar alertas
       </Heading>
-      <CreateAlertDialog isOpen={open} onClose={onClose} />
-      <AlertDrawer
-        isOpen={AlertOpen}
-        onClose={onAlertClose}
-        data={selectedAlert}
-      />
+      <Portal>
+        <CreateAlertDialog isOpen={open} onClose={onClose} />
+        <AlertDrawer
+          isOpen={AlertOpen}
+          onClose={onAlertClose}
+          data={selectedAlert}
+        />
+      </Portal>
       <Flex w={"100%"} height={"100%"} direction={"column"}>
         {isLoading == true && isError == false ? (
           <Flex
@@ -180,7 +183,9 @@ export default function Search() {
                             {item.desc_alert.length == 0 ? (
                               <Text color={"fg.muted"}>Sem descrição</Text>
                             ) : (
-                              <Text truncate maxW={"80%"}>{item.desc_alert}</Text>
+                              <Text truncate maxW={"80%"}>
+                                {item.desc_alert}
+                              </Text>
                             )}
                           </Table.Cell>
                           <Table.Cell>
